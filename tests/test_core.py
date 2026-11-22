@@ -36,10 +36,12 @@ NAMESPACES = [
     "int",
     "list",
     "match",
+    "path",
     "re",
     "str",
     "time",
     "timedelta",
+    "uuid",
 ]
 
 

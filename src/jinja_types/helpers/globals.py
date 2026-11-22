@@ -1,4 +1,4 @@
-"""Template globals: the `decimal` and `re` namespace objects, `today()` and `now()`.
+"""Template globals: the `decimal` and `re` namespace objects, `today()`, `now()`, `uuid5()`.
 
 Globals and filters are separate Jinja tables, so the global `decimal` and the filter
 `decimal.quantize` coexist.
@@ -8,6 +8,8 @@ import decimal as _decimal
 import re as _re
 from datetime import UTC, date, datetime, tzinfo
 from typing import ClassVar
+from uuid import NAMESPACE_DNS, UUID
+from uuid import uuid5 as _uuid5
 
 from jinja_types.core import Collection
 
@@ -97,3 +99,21 @@ def today() -> date:
 def now(tz: tzinfo | None = None) -> datetime:
     """Return the current datetime, local or in `tz` (a `tzinfo`)."""
     return datetime.now(tz)
+
+
+@collection.global_(
+    examples=[
+        (
+            "{{ uuid5('6ba7b810-9dad-11d1-80b4-00c04fd430c8', 'example.com') }}",
+            {},
+            "cfbff0d1-9375-5685-968c-48ce8b15ae17",
+        ),
+        ("{{ uuid5(ns, 'example.com') | uuid.version }}", {"ns": NAMESPACE_DNS}, "5"),
+    ]
+)
+def uuid5(namespace: UUID | str, name: str) -> UUID:
+    """Return the name-based (SHA-1) UUID; same input, same UUID. `namespace` may be UUID text.
+
+    There is no `uuid4()`: random values would make renders differ every time.
+    """
+    return _uuid5(namespace if isinstance(namespace, UUID) else UUID(namespace), name)

@@ -127,9 +127,9 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 8: `uuid`, `path`
 
-- [ ] `uuid`: attributes `hex`, `int`, `bytes`, `urn`, `version`, `variant`, `fields`, `time`, `node`. Globals `uuid4()` / `uuid5(namespace, name)` if the user approves (ask: randomness in templates)
-- [ ] `path` (PurePath only): `name`, `stem`, `suffix`, `suffixes`, `parent`, `parents`, `parts`, `anchor`, `drive`, `root`, `as_posix`, `as_uri`, `with_name`, `with_stem`, `with_suffix`, `joinpath`, `relative_to`, `is_relative_to`, `is_absolute`, `match`, `full_match` (3.13+, guarded)
-- [ ] Test asserting that no `path.*` member performs I/O (the allowlist is explicit)
+- [x] `uuid`: attributes `hex`, `int`, `bytes`, `urn`, `version`, `variant`, `fields`, `time`, `node`. Global `uuid5(namespace, name)` only; no `uuid4()`, so renders stay repeatable (decided 2026-11-22)
+- [x] `path` (PurePath only): `name`, `stem`, `suffix`, `suffixes`, `parent`, `parents`, `parts`, `anchor`, `drive`, `root`, `as_posix`, `as_uri`, `with_name`, `with_stem`, `with_suffix`, `joinpath`, `relative_to`, `is_relative_to`, `is_absolute`, `match`, `full_match` (3.13+, guarded)
+- [x] Test asserting that no `path.*` member performs I/O (the allowlist is explicit)
 
 **Done when:** both namespaces pass examples and parity, and the no-I/O test is green.
 

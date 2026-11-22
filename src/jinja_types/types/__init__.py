@@ -19,15 +19,18 @@ def builtin_collections() -> list[Collection]:
         fraction_,
         int_,
         list_,
+        path_,
         str_,
         time_,
         timedelta_,
+        uuid_,
     )
 
     modules = [
         str_,
         int_,
         list_,
+        path_,
         bool_,
         float_,
         decimal_,
@@ -37,6 +40,7 @@ def builtin_collections() -> list[Collection]:
         datetime_,
         time_,
         timedelta_,
+        uuid_,
         re_,
         match_,
     ]

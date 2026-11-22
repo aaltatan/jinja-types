@@ -32,3 +32,9 @@ With `salary = Decimal("1500.005")` this gives `1,500.01`. The global `decimal` 
 `Decimal`, `Context` and the `ROUND_*` constants; the filter namespace `decimal.*` holds the
 `Decimal` methods. `bool` is a subclass of `int`, so every `int.*` filter also accepts `true`
 and `false`.
+
+Dates work the same way. `date.*` filters also accept datetimes and call the `datetime` version
+when one exists, so `{{ moment | date.isoformat(" ", "seconds") }}` works on a datetime. The
+`datetime.*` namespace holds only what `datetime` adds or overrides. `datetime.astimezone` also
+takes an IANA timezone name, e.g. `{{ moment | datetime.astimezone("Asia/Damascus") }}`; on
+Windows, install the `tzdata` package for timezone names to resolve.

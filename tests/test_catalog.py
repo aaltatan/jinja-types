@@ -29,7 +29,7 @@ def test_catalog_json_round_trip() -> None:
     assert entries["date.year"]["kinds"] == ["attribute"]
     assert entries["date.strftime"]["input_type"] == "date"
     assert entries["date.strftime"]["params"] == [
-        {"name": "format", "kind": "positional_only", "annotation": "str", "default": None}
+        {"name": "format", "kind": "positional_or_keyword", "annotation": "str", "default": None}
     ]
     assert entries["answer"]["input_type"] is None
-    assert entries["date.year"]["examples"][0][1] == {"d": "datetime.date(2026, 1, 5)"}
+    assert entries["date.year"]["examples"][0][1] == {"x": "datetime.date(2026, 11, 22)"}

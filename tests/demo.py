@@ -61,7 +61,8 @@ def answer() -> int:
     return 42
 
 
-collections = [date_ns, datetime_ns, list_ns, helpers]
+# date_ns and datetime_ns clash with the real namespaces; tests use them in bare registries.
+collections = [list_ns, helpers]
 bad_plugin = [date_ns, "not a collection"]
 
 

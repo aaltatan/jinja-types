@@ -25,7 +25,18 @@ from jinja_types import (
 )
 from jinja_types.core import PLUGIN_GROUP, OptionsKwargs, plugins, type_repr
 
-NAMESPACES = ["bool", "decimal", "float", "fraction", "int", "str"]
+NAMESPACES = [
+    "bool",
+    "date",
+    "datetime",
+    "decimal",
+    "float",
+    "fraction",
+    "int",
+    "str",
+    "time",
+    "timedelta",
+]
 
 
 def render(
@@ -493,7 +504,7 @@ def test_registry_lookup_and_copy() -> None:
 
     copied.include(Collection("extra", int))
 
-    demo_names = sorted([*NAMESPACES, "date", "datetime", "list"])
+    demo_names = sorted([*NAMESPACES, "list"])
 
     assert [ns.name for ns in registry.namespaces()] == demo_names
     assert [ns.name for ns in copied.namespaces()] == sorted([*demo_names, "extra"])

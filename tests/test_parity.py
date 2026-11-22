@@ -1,12 +1,12 @@
 """Every type-member wrapper gives the same output as the real Python member.
 
 Each example is rendered twice: once with the wrappers, once with filters that call the real
-member directly (on a copy, returning the copy when the member returns None, as for mutating
-methods).
+member directly (on a copy; a list or dict member that returns None returns the mutated copy).
 """
 
 import copy
 from collections.abc import Callable
+from zoneinfo import ZoneInfo
 
 import pytest
 from demo import demo_registry
@@ -29,13 +29,18 @@ def real(spec: MemberSpec) -> Callable[..., object]:
         if spec.kinds & Kind.ATTRIBUTE:
             return getattr(value, spec.member)
 
+        if spec.name == "datetime.astimezone":  # the one extension: IANA zone names
+            args = tuple(ZoneInfo(arg) if isinstance(arg, str) else arg for arg in args)
+
         if spec.classmethod:
             return getattr(spec.namespace.type, spec.member)(value, *args, **kwargs)
 
         target = copy.copy(value)
         result = getattr(target, spec.member)(*args, **kwargs)
 
-        return target if result is None else result
+        mutated = result is None and isinstance(target, list | dict)
+
+        return target if mutated else result
 
     return call
 

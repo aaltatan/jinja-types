@@ -86,12 +86,12 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 5: Dates — `date`, `datetime`, `time`, `timedelta`
 
-- [ ] `date`: `strftime`, `isoformat`, `isocalendar`, `isoweekday`, `weekday`, `toordinal`, `timetuple`, `ctime`, `replace`; attributes `year`, `month`, `day`; classmethods `date.fromisoformat`, `date.fromordinal`, `date.fromisocalendar`, `date.fromtimestamp`
-- [ ] `datetime`: everything from `date` that it overrides or adds (`date`, `time`, `timetz`, `timestamp`, `astimezone`, `utcoffset`, `tzname`, `dst`, `isoformat(sep, timespec)`, `replace`); attributes `hour … microsecond`, `tzinfo`, `fold`; classmethods `datetime.strptime`, `datetime.fromisoformat`, `datetime.fromtimestamp`, `datetime.combine`
-- [ ] `time`: `strftime`, `isoformat`, `replace`, `utcoffset`, `tzname`, `dst`; attributes
-- [ ] `timedelta`: `total_seconds`; attributes `days`, `seconds`, `microseconds`
-- [ ] Dispatch tests: `date.strftime` / `date.replace` / `date.isoformat` on a `datetime` value call the `datetime` versions
-- [ ] Timezone names via `zoneinfo` in `datetime.astimezone("Asia/Damascus")` (string → `ZoneInfo`; documented)
+- [x] `date`: `strftime`, `isoformat`, `isocalendar`, `isoweekday`, `weekday`, `toordinal`, `timetuple`, `ctime`, `replace`; attributes `year`, `month`, `day`; classmethods `date.fromisoformat`, `date.fromordinal`, `date.fromisocalendar`, `date.fromtimestamp`
+- [x] `datetime`: everything from `date` that it overrides or adds (`date`, `time`, `timetz`, `timestamp`, `astimezone`, `utcoffset`, `tzname`, `dst`, `isoformat(sep, timespec)`, `replace`); attributes `hour … microsecond`, `tzinfo`, `fold`; classmethods `datetime.strptime`, `datetime.fromisoformat`, `datetime.fromtimestamp`, `datetime.combine`
+- [x] `time`: `strftime`, `isoformat`, `replace`, `utcoffset`, `tzname`, `dst`; attributes
+- [x] `timedelta`: `total_seconds`; attributes `days`, `seconds`, `microseconds`
+- [x] Dispatch tests: `date.strftime` / `date.replace` / `date.isoformat` on a `datetime` value call the `datetime` versions
+- [x] Timezone names via `zoneinfo` in `datetime.astimezone("Asia/Damascus")` (string → `ZoneInfo`; documented)
 
 **Done when:** dates pass examples and parity, and dispatch is proven by tests.
 

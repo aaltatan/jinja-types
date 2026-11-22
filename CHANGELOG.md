@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-11-22
+
+### Added
+
+- The README ends with a reference of every filter, test and global, with all their examples
+  and results, generated from the catalog by `scripts/gen_docs.py`.
+
 ## [0.1.0] - 2026-11-22
 
 First release.
@@ -32,4 +39,5 @@ First release.
   catalog exported as JSON (with a schema) or Markdown by the `jinja-types` command.
 - Generated reference docs in `docs/` and a plugin author guide (`docs/plugins.md`).
 
+[0.1.1]: https://github.com/aaltatan/jinja-types/releases/tag/v0.1.1
 [0.1.0]: https://github.com/aaltatan/jinja-types/releases/tag/v0.1.0

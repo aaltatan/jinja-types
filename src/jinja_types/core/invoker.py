@@ -186,6 +186,12 @@ class Invoker:
             elif isinstance(exc, TimeoutError):
                 hint = "simplify the pattern, or install with a larger regex_timeout"
 
+            elif isinstance(exc, ImportError) and isinstance(
+                extra := getattr(exc, "extra", None), str
+            ):
+                # arapy's MissingExtraError names the extra; jinja-types has one of the same name
+                hint = f"install 'jinja-types[{extra}]'"
+
             raise JinjaTypesError(
                 spec.name,
                 f"{type(exc).__name__}: {exc}",

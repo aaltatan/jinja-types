@@ -51,7 +51,7 @@ The hour, 0 to 23.
 Return the time in ISO 8601 format.
 
 - ``{{ x | time.isoformat }}`` with `x = datetime.time(14, 30, 5, 250)` → ``14:30:05.000250``
-- ``{{ x | time.isoformat('minutes') }}`` with `x = datetime.time(12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``12:00+03:00``
+- ``{{ x | time.isoformat('minutes') }}`` with `x = time(...)` → ``12:00+03:00``
 
 ## `time.microsecond`
 
@@ -82,7 +82,7 @@ The minute.
 Return the time with the given fields replaced. `tzinfo=none` makes it naive.
 
 - ``{{ x | time.replace(second=0, microsecond=0) }}`` with `x = datetime.time(14, 30, 5, 250)` → ``14:30:00``
-- ``{{ x | time.replace(tzinfo=none) }}`` with `x = datetime.time(12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``12:00:00``
+- ``{{ x | time.replace(tzinfo=none) }}`` with `x = time(...)` → ``12:00:00``
 
 ## `time.second`
 
@@ -112,7 +112,7 @@ Format the time with a `strftime` format string.
 
 The timezone, or None for a naive time.
 
-- ``{{ x | time.tzinfo }}`` with `x = datetime.time(12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``UTC+03:00``
+- ``{{ x | time.tzinfo }}`` with `x = time(...)` → ``UTC+03:00``
 
 ## `time.tzname`
 
@@ -122,7 +122,7 @@ The timezone, or None for a naive time.
 
 Return the timezone name, or None for a naive time.
 
-- ``{{ x | time.tzname }}`` with `x = datetime.time(12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``UTC+03:00``
+- ``{{ x | time.tzname }}`` with `x = time(...)` → ``UTC+03:00``
 
 ## `time.utcoffset`
 
@@ -132,4 +132,4 @@ Return the timezone name, or None for a naive time.
 
 Return the UTC offset, or None for a naive time.
 
-- ``{{ x | time.utcoffset }}`` with `x = datetime.time(12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``3:00:00``
+- ``{{ x | time.utcoffset }}`` with `x = time(...)` → ``3:00:00``

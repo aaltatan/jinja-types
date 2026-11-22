@@ -12,6 +12,7 @@ def builtin_collections() -> list[Collection]:
     from jinja_types.regex import match_, re_
 
     from . import (
+        ar_,
         bool_,
         date_,
         datetime_,
@@ -28,24 +29,9 @@ def builtin_collections() -> list[Collection]:
         uuid_,
     )
 
-    modules = [
-        str_,
-        int_,
-        list_,
-        path_,
-        bool_,
-        float_,
-        decimal_,
-        dict_,
-        fraction_,
-        date_,
-        datetime_,
-        time_,
-        timedelta_,
-        uuid_,
-        re_,
-        match_,
-    ]
+    numbers = [int_, bool_, float_, decimal_, fraction_]
+    dates = [date_, datetime_, time_, timedelta_]
+    modules = [str_, *numbers, *dates, list_, dict_, uuid_, path_, re_, match_, ar_]
 
     if find_spec("babel") is not None:  # the [babel] extra
         from jinja_types.contrib import babel

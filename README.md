@@ -67,3 +67,25 @@ is the `locale=` argument, else `install(env, locale="ar_SY")`, else `en_US`:
 `SYP` has no minor unit in CLDR, so `currency_digits=false` is needed to show piastres. `numbering_system="default"`
 uses the locale's own separators (`٬` and `٫`); Babel keeps Latin digits either way, so
 Arabic-Indic digits come from the arapy plugin.
+
+Arabic text, numbers and dates come from [arapy](https://pypi.org/project/arapy/), a dependency,
+under the `ar` namespace. arapy ships no currencies: define one in Python and pass it in:
+
+```python
+from arapy import Currency, Gender, Noun
+
+qirsh = Noun.create("قرش", "قرشان", "قروش", gender=Gender.MASCULINE)
+syp = Currency.create(
+    code="SYP", singular="ليرة سورية", dual="ليرتان سوريتان", plural="ليرات سورية",
+    gender=Gender.FEMININE, subunit=qirsh, symbol="ل.س",
+)
+```
+
+```jinja
+{{ salary | ar.to_words(syp) }}       {# ألف وخمسمئة ليرة سورية #}
+{{ salary | ar.format_money(syp) }}   {# ١٬٥٠٠ ل.س #}
+{{ day | ar.format_date("%A %d %B %Y", digits="arabic") }}
+```
+
+`ar.to_hijri` needs `jinja-types[hijri]`, and `ar.shape` / `ar.reshape_only` need
+`jinja-types[shape]`.

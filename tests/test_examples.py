@@ -17,6 +17,15 @@ CASES = [
 ]
 
 
+def fresh(value: object) -> object:
+    """A deep copy, so examples cannot leak changes; immutable uncopyable values are shared."""
+
+    try:
+        return copy.deepcopy(value)
+    except TypeError:  # e.g. arapy nouns hold a mappingproxy
+        return value
+
+
 @pytest.mark.parametrize("autoescape", [False, True])
 @pytest.mark.parametrize("example", CASES)
 def test_example(example: Example, autoescape: bool) -> None:
@@ -25,4 +34,7 @@ def test_example(example: Example, autoescape: bool) -> None:
 
     install(env, REGISTRY)
 
-    assert env.from_string(template).render(**copy.deepcopy(dict(context))) == expected
+    assert (
+        env.from_string(template).render({key: fresh(value) for key, value in context.items()})
+        == expected
+    )

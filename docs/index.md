@@ -2,6 +2,7 @@
 
 # jinja-types reference
 
+- [`ar`](ar.md): 23 members
 - [`babel`](babel.md): 8 members
 - [`date`](date.md): 16 members
 - [`datetime`](datetime.md): 23 members

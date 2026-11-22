@@ -62,7 +62,20 @@ class Catalog:
         return len(self.entries)
 
     def to_dict(self) -> dict[str, object]:
-        return {"entries": [dataclasses.asdict(entry) for entry in self.entries]}
+        """Plain data. Example context values are kept as they are (not deep-copied)."""
+
+        entries = [
+            {field.name: getattr(entry, field.name) for field in dataclasses.fields(entry)}
+            | {
+                "params": [dataclasses.asdict(param) for param in entry.params],
+                "examples": [
+                    [template, dict(context), out] for template, context, out in entry.examples
+                ],
+            }
+            for entry in self.entries
+        ]
+
+        return {"entries": entries}
 
     def to_json(self, *, indent: int | None = 2) -> str:
         """Export as JSON. Non-JSON example context values are written as `repr()`."""
@@ -129,6 +142,14 @@ def signature(entry: CatalogEntry) -> str:
     return f"{entry.name}({', '.join(parts)}) -> {entry.returns}"
 
 
+def short_repr(value: object, limit: int = 80) -> str:
+    """`repr(value)`, or `TypeName(...)` when that is longer than `limit`."""
+
+    text = repr(value)
+
+    return text if len(text) <= limit else f"{type(value).__name__}(...)"
+
+
 def entry_markdown(entry: CatalogEntry) -> list[str]:
     """Return the Markdown lines for one member."""
 
@@ -146,7 +167,7 @@ def entry_markdown(entry: CatalogEntry) -> list[str]:
         lines += [entry.doc, ""]
 
     for template, context, output in entry.examples:
-        given = ", ".join(f"`{key} = {value!r}`" for key, value in context.items())
+        given = ", ".join(f"`{key} = {short_repr(value)}`" for key, value in context.items())
         suffix = f" with {given}" if given else ""
 
         lines.append(f"- ``{template}``{suffix} → ``{output}``")

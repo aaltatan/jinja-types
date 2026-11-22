@@ -11,7 +11,7 @@
 Convert to the timezone `tz`: a `tzinfo`, an IANA name, or None for local time.
 
 - ``{{ x | datetime.astimezone('Asia/Damascus') }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone.utc)` → ``2026-11-22 15:00:00+03:00``
-- ``{{ x | datetime.astimezone(tz) }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))`, `tz = datetime.timezone.utc` → ``2026-11-22 09:00:00+00:00``
+- ``{{ x | datetime.astimezone(tz) }}`` with `x = datetime(...)`, `tz = datetime.timezone.utc` → ``2026-11-22 09:00:00+00:00``
 
 ## `datetime.combine`
 
@@ -52,7 +52,7 @@ Return the date part.
 
 Return the daylight saving offset, or None if unknown.
 
-- ``{{ x | datetime.dst }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``None``
+- ``{{ x | datetime.dst }}`` with `x = datetime(...)` → ``None``
 
 ## `datetime.fold`
 
@@ -105,7 +105,7 @@ Return the datetime in ISO 8601 format.
 
 - ``{{ x | datetime.isoformat }}`` with `x = datetime.datetime(2026, 11, 22, 14, 30, 5, 250)` → ``2026-11-22T14:30:05.000250``
 - ``{{ x | datetime.isoformat(' ', 'minutes') }}`` with `x = datetime.datetime(2026, 11, 22, 14, 30, 5, 250)` → ``2026-11-22 14:30``
-- ``{{ x | date.isoformat(timespec='seconds') }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``2026-11-22T12:00:00+03:00``
+- ``{{ x | date.isoformat(timespec='seconds') }}`` with `x = datetime(...)` → ``2026-11-22T12:00:00+03:00``
 
 ## `datetime.microsecond`
 
@@ -136,7 +136,7 @@ The minute.
 Return the datetime with the given fields replaced. `tzinfo=none` makes it naive.
 
 - ``{{ x | datetime.replace(hour=9, microsecond=0) }}`` with `x = datetime.datetime(2026, 11, 22, 14, 30, 5, 250)` → ``2026-11-22 09:30:05``
-- ``{{ x | datetime.replace(tzinfo=none) }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``2026-11-22 12:00:00``
+- ``{{ x | datetime.replace(tzinfo=none) }}`` with `x = datetime(...)` → ``2026-11-22 12:00:00``
 
 ## `datetime.second`
 
@@ -196,7 +196,7 @@ Return a `time.struct_time`.
 
 Return the time part, with the timezone.
 
-- ``{{ x | datetime.timetz }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``12:00:00+03:00``
+- ``{{ x | datetime.timetz }}`` with `x = datetime(...)` → ``12:00:00+03:00``
 
 ## `datetime.tzinfo`
 
@@ -216,7 +216,7 @@ The timezone, or None for a naive datetime.
 
 Return the timezone name, or None for a naive datetime.
 
-- ``{{ x | datetime.tzname }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``UTC+03:00``
+- ``{{ x | datetime.tzname }}`` with `x = datetime(...)` → ``UTC+03:00``
 
 ## `datetime.utcoffset`
 
@@ -226,7 +226,7 @@ Return the timezone name, or None for a naive datetime.
 
 Return the UTC offset, or None for a naive datetime.
 
-- ``{{ x | datetime.utcoffset }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``3:00:00``
+- ``{{ x | datetime.utcoffset }}`` with `x = datetime(...)` → ``3:00:00``
 - ``{{ x | datetime.utcoffset }}`` with `x = datetime.datetime(2026, 11, 22, 14, 30, 5, 250)` → ``None``
 
 ## `datetime.utctimetuple`
@@ -237,4 +237,4 @@ Return the UTC offset, or None for a naive datetime.
 
 Return a `time.struct_time` in UTC.
 
-- ``{{ x | datetime.utctimetuple | list }}`` with `x = datetime.datetime(2026, 11, 22, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))` → ``[2026, 11, 22, 9, 0, 0, 6, 326, 0]``
+- ``{{ x | datetime.utctimetuple | list }}`` with `x = datetime(...)` → ``[2026, 11, 22, 9, 0, 0, 6, 326, 0]``

@@ -15,6 +15,8 @@ dependencies = [
 [project.optional-dependencies]
 regex = ["regex"]
 babel = ["babel"]
+hijri = ["arapy[hijri]>=0.1.0"]
+shape = ["arapy[shape]>=0.1.0"]
 
 [project.scripts]
 jinja-types = "jinja_types.cli:main"
@@ -44,6 +46,8 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "ANN"]
 [tool.ruff.lint.per-file-ignores]
 # locale output really contains Arabic separators and narrow no-break spaces
 "src/jinja_types/contrib/babel.py" = ["RUF001", "RUF002"]
+"src/jinja_types/types/ar_.py" = ["RUF001", "RUF002"]
+"tests/test_ar.py" = ["RUF001", "RUF002"]
 
 [tool.mypy]
 strict = true

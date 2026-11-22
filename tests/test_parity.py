@@ -19,8 +19,10 @@ from jinja_types.types.str_ import SANDBOX
 
 REGISTRY = demo_registry()
 MUTATING = {"append", "extend", "insert", "remove", "reverse", "sort", "clear", "update"}
-# `re.*` and `babel.*` wrap module functions, not type members
-TYPE_SPECS = [spec for spec in REGISTRY.specs() if spec.namespace.name not in (None, "re", "babel")]
+# `re.*`, `babel.*` and `ar.*` wrap module functions, not type members
+TYPE_SPECS = [
+    spec for spec in REGISTRY.specs() if spec.namespace.name not in (None, "re", "babel", "ar")
+]
 CASES = [
     pytest.param(example, id=f"{spec.name}-{i}")
     for spec in TYPE_SPECS

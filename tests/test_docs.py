@@ -71,3 +71,13 @@ def test_generated_docs_are_up_to_date() -> None:
         assert (docs / name).read_text(encoding="utf-8") == text, (
             f"docs/{name} is stale: run `uv run python scripts/gen_docs.py`"
         )
+
+
+@pytest.mark.skipif(sys.version_info >= (3, 13), reason="the docs are generated on Python 3.12")
+def test_readme_reference_is_up_to_date() -> None:
+    readme = runpy.run_path(str(ROOT / "scripts" / "gen_docs.py"))["readme"]
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert readme(text, Registry.default().catalog()) == text, (
+        "the README reference is stale: run `uv run python scripts/gen_docs.py`"
+    )

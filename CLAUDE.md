@@ -1,6 +1,6 @@
 # CLAUDE.md: jinja-types
 
-`jinja-types` (import `jinja_types`) is a Jinja2 extension. It exposes Python type methods and attributes (str, int, float, bool, Decimal, Fraction, date, datetime, time, timedelta, list, dict, UUID, Path), plus the `re` module, as Jinja filters and tests. It is built around a **registry**, so new filter sets are easy to add. Arabic filters (`ar.*`) come from **arapy**, a runtime dependency. It is a hard dependency of **templify**, which renders templates in Python only.
+`jinja-types` (import `jinja_types`) is a Jinja2 extension. It exposes Python type methods and attributes (str, int, float, bool, Decimal, Fraction, date, datetime, time, timedelta, list, dict, UUID, Path), plus the `re` module and compiled patterns, as Jinja filters and tests. It is built around a **registry**, so new filter sets are easy to add. Arabic filters (`ar.*`) come from **arapy**, a runtime dependency. It is a hard dependency of **templify**, which renders templates in Python only.
 
 Read `PHASES.md` for the build order. Work one phase at a time. A phase is done only when all of its acceptance criteria pass.
 
@@ -27,7 +27,7 @@ uv run ruff check --fix && uv run ruff format && uv run mypy && uv run pytest
 
 ## Core design rules (decided; do not change without asking)
 
-1. **Qualified names only for type members.** Every type method or attribute is reachable only as `namespace.member`, e.g. `str.zfill`, `decimal.quantize`, `date.year`, `path.stem`, `re.sub`, `match.group`. There are no short aliases, so nothing can clash with Jinja built-ins (`count`, `format`, `join`, `max`, `min`, `replace`, …). Jinja's parser accepts dotted filter and test names; this was verified on Jinja 3.1.6.
+1. **Qualified names only for type members.** Every type method or attribute is reachable only as `namespace.member`, e.g. `str.zfill`, `decimal.quantize`, `date.year`, `path.stem`, `re.sub`, `pattern.findall`, `match.group`. There are no short aliases, so nothing can clash with Jinja built-ins (`count`, `format`, `join`, `max`, `min`, `replace`, …). Jinja's parser accepts dotted filter and test names; this was verified on Jinja 3.1.6.
 2. **Names identical to Python.** The member name is the Python method or attribute name, and parameter names and order match Python. The piped value is always `self` (for `re.*`, the string being searched).
 3. **Plain names for helpers.** Helpers that are not type members use plain names: `fmt`, `to_str`, `to_int`, `to_float`, `to_bool`, `to_decimal`, `to_fraction`, `to_date`, `to_datetime`, `to_time`, `to_timedelta`, `to_uuid`, `to_path`. The registry **raises** if a plain name collides with a Jinja built-in or with another plain name.
 4. **Dispatch within subclasses only.** `date.strftime` applied to a `datetime` value calls `datetime.strftime` if it is registered. The registry walks the value's MRO up to the namespace type and uses the most specific match. A value that is not an instance of the namespace type raises `JinjaTypesError`. Note that `bool` is a subclass of `int`, so `int.*` accepts `True`; this is documented.
@@ -35,12 +35,12 @@ uv run ruff check --fix && uv run ruff format && uv run mypy && uv run pytest
 6. **Predicates become tests.** A wrapper whose return annotation is `bool` is registered as a filter **and** a test (`{% if code is str.isdigit %}`). `re.search`/`re.match`/`re.fullmatch` are registered as tests explicitly; the test is true when a match is found.
 7. **Mutating methods work on copies.** `list.append/extend/insert/remove/reverse/sort/clear` and `dict.update/clear` return a **new** object and never mutate the input. `list.pop`, `dict.pop`, `dict.popitem` and `dict.setdefault` return Python's return value (the item), computed on a copy. A generic test asserts that inputs are never mutated.
 8. **Classmethods become parsing filters.** `date.fromisoformat`, `datetime.strptime(fmt)`, `datetime.fromtimestamp`, `int.from_bytes`, `fraction.from_decimal`, … take the piped value as their first argument. They live next to the friendly `to_*` helpers.
-9. **Constants are globals only.** Templates get namespace objects as globals: `decimal` (`decimal.Decimal`, `decimal.ROUND_HALF_UP`, …), `re` (flags only: `re.I`, `re.M`, `re.S`, `re.X`, `re.A`, …), plus `today()` and `now()`. Globals and filters are separate Jinja namespaces, so the global `decimal` and the filter `decimal.quantize` coexist.
+9. **Constants are globals only.** Templates get namespace objects as globals: `decimal` (`decimal.Decimal`, `decimal.ROUND_HALF_UP`, …), `re` (flags `re.I`, `re.M`, `re.S`, `re.X`, `re.A`, … and `re.compile`), plus `today()` and `now()`. Globals and filters are separate Jinja namespaces, so the global `decimal` and the filter `decimal.quantize` coexist.
 10. **Pure paths only.** The `path.*` namespace exposes only `PurePath` members, never anything that touches the disk.
 11. **Strict by default.** `None` or `""` input raises `JinjaTypesError`. The option `none_passthrough=True` returns such values unchanged.
 12. **Explicit conversion, opt-in coercion.** By default, string input must be converted (`| to_date`, `| date.fromisoformat`). The option `coerce=True` converts a `str` to the namespace type using that namespace's `parse` function before calling the member.
 13. **One error type.** Every failure raises `JinjaTypesError`, a subclass of `jinja2.TemplateRuntimeError`. It carries the filter name, the value's type, the supported types, the original exception, and a **hint**. Example: `date.strftime: got 'str', expected date | datetime. Hint: convert first with '| to_date' or '| date.fromisoformat'.`
-14. **Regex.** The piped value is the string. Engine is stdlib `re` by default; `[regex]` switches to the `regex` library with `regex_timeout=1.0` (configurable; a timeout raises `JinjaTypesError`). `re.sub`/`re.subn` accept a string replacement or a **Jinja macro** taking the Match; the macro result must be converted to plain `str` so autoescape works once. `re.compile` is not in v1.
+14. **Regex.** The piped value is the string. Engine is stdlib `re` by default; `[regex]` switches to the `regex` library with `regex_timeout=1.0` (configurable; a timeout raises `JinjaTypesError`). `re.sub`/`re.subn` accept a string replacement or a **Jinja macro** taking the Match; the macro result must be converted to plain `str` so autoescape works once. `re.compile(pattern, flags=0)` on the `re` global returns a cached compiled pattern of the active engine; its members are the `pattern` namespace (the pattern is the piped value, `self`), with the same timeout and macro replacement.
 15. **Sandbox-safe.** Everything must work in `ImmutableSandboxedEnvironment`, which is what templify uses. Never expose callables that touch the filesystem, network, or process.
 
 ---
@@ -66,14 +66,14 @@ src/jinja_types/
   types/               # one module per namespace: str_.py, int_.py, float_.py, bool_.py,
                        #   decimal_.py, fraction_.py, date_.py, datetime_.py, time_.py,
                        #   timedelta_.py, list_.py, dict_.py, uuid_.py, path_.py, ar_.py (arapy)
-  regex/               # re_.py (module functions), match_.py (Match members), engine.py
+  regex/               # re_.py (module functions), pattern_.py (Pattern members), match_.py (Match members), engine.py
   contrib/babel.py     # [babel] extra: babel.format_decimal, babel.format_currency, babel.format_date…
   cli.py               # `jinja-types catalog …` (argparse, no extra deps)
 ```
 
 ### Concepts
 
-- **`Namespace`** is a name and a Python type, with an optional `parse(str) -> T` used by `coerce=True`. Built-in namespaces: `str int float bool decimal fraction date datetime time timedelta list dict uuid path re match`. `re` is a *module namespace*: its value type is `str`. The helper namespace is `None`, which gives plain names.
+- **`Namespace`** is a name and a Python type, with an optional `parse(str) -> T` used by `coerce=True`. Built-in namespaces: `str int float bool decimal fraction date datetime time timedelta list dict uuid path re pattern match`. `re` is a *module namespace*: its value type is `str`. The helper namespace is `None`, which gives plain names.
 - **`MemberSpec`** (frozen) has these fields: `name` (qualified), `namespace`, `member`, `func`, `kinds` (`FILTER`, `TEST`, `ATTRIBUTE`, `GLOBAL`), `params: tuple[Param, …]`, `returns`, `doc`, `examples`, `source` (`"jinja_types"` or the plugin name). It is built from the wrapper's signature and type hints **at registration time**.
 - **`Collection`** is a bag of specs for one namespace, filled with decorators. Each `types/*.py` module exports exactly one collection. This is the unit that plugins provide.
 - **`Registry`** combines collections. It enforces the conflict rules, owns the dispatch tables, produces the catalog, and installs itself into an `Environment`.

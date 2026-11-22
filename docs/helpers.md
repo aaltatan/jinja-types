@@ -41,9 +41,10 @@ Return the current datetime, local or in `tz` (a `tzinfo`).
 
 *global*
 
-The `re` flags object.
+The `re` flags object, with `re.compile(pattern, flags=0)` for the `pattern` namespace.
 
 - ``{{ re.I == 2 and re.IGNORECASE == re.I }}`` → ``True``
+- ``{{ re.compile('a+', re.I) | pattern.findall('aAb') | join }}`` → ``aA``
 
 ## `to_bool`
 

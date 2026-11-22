@@ -2,7 +2,7 @@
 
 `re.search("x")` on a value calls `re.search("x", value)`. Parameter names follow Python
 (`pattern`, `repl`, `count`, `maxsplit`, `flags`); flags come from the `re` global (`re.I`, …).
-`re.compile` is not in v1.
+For a compiled pattern (`re.compile(...)`), see the `pattern` namespace.
 """
 
 import re
@@ -84,17 +84,16 @@ def finditer(value: str, /, pattern: str, flags: int = 0) -> Iterator[re.Match[s
     return engine.call("finditer", pattern, value, flags=flags)
 
 
-def substitute(value: str, pattern: str, repl: Repl, count: int, flags: int) -> tuple[str, int]:
-    """`subn`, where `repl` may also be a Jinja macro (or any callable) taking the match.
+def substitute(value: str, pattern: object, repl: Repl, count: int) -> tuple[str, int]:
+    """`subn` on a compiled `pattern`, where `repl` may also be a Jinja macro taking the match.
 
     A macro's result is Markup under autoescape: it is kept as is, and the text between matches
     is escaped once when the pieces are joined. Without autoescape everything is plain `str`.
+    Shared by `re.sub` / `re.subn` and `pattern.sub` / `pattern.subn`.
     """
 
     if not callable(repl):
-        result: tuple[str, int] = engine.call(
-            "subn", pattern, repl, value, count=count, flags=flags
-        )
+        result: tuple[str, int] = engine.method(pattern, "subn", repl, value, count=count)
 
         return result
 
@@ -102,7 +101,7 @@ def substitute(value: str, pattern: str, repl: Repl, count: int, flags: int) -> 
     end = 0
     found = 0
 
-    for found_match in engine.call("finditer", pattern, value, flags=flags):
+    for found_match in engine.method(pattern, "finditer", value):
         if count and found == count:
             break
 
@@ -137,7 +136,7 @@ def substitute(value: str, pattern: str, repl: Repl, count: int, flags: int) -> 
 )
 def sub(value: str, /, pattern: str, repl: Repl, count: int = 0, flags: int = 0) -> str:
     """Replace matches with `repl`: a string (`\\1`, `\\g<name>`) or a macro taking the match."""
-    return substitute(value, pattern, repl, count, flags)[0]
+    return substitute(value, engine.compile(pattern, flags), repl, count)[0]
 
 
 @collection.filter(
@@ -150,7 +149,7 @@ def subn(
     value: str, /, pattern: str, repl: Repl, count: int = 0, flags: int = 0
 ) -> tuple[str, int]:
     """Like `re.sub`, but return `(new_string, number_of_substitutions)`."""
-    return substitute(value, pattern, repl, count, flags)
+    return substitute(value, engine.compile(pattern, flags), repl, count)
 
 
 @collection.filter(

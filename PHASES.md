@@ -172,10 +172,10 @@ Arabic filters ship in `Registry.default()` like every other built-in collection
 
 ## Phase 12: `re.compile` and the `pattern` namespace
 
-- [ ] `re.compile(pattern, flags=0)` on the `re` global (alongside the flags), engine-aware, with a small cache; with `[regex]` the timeout still applies
-- [ ] `pattern` namespace (value is a compiled Pattern): `search`, `match`, `fullmatch` (also tests), `findall`, `finditer`, `sub`, `subn`, `split` with `pos` / `endpos` where Python has them; attributes `pattern`, `flags`, `groups`, `groupindex`
-- [ ] `re.sub` / `re.subn` macro replacement shared with `pattern.sub` / `pattern.subn` (escape once under autoescape)
-- [ ] Update rule 14 in `CLAUDE.md` (`re.compile` is no longer out of scope)
+- [x] `re.compile(pattern, flags=0)` on the `re` global (alongside the flags), engine-aware, with a small cache; with `[regex]` the timeout still applies
+- [x] `pattern` namespace (value is a compiled Pattern): `search`, `match`, `fullmatch` (also tests), `findall`, `finditer`, `sub`, `subn`, `split` with `pos` / `endpos` where Python has them; attributes `pattern`, `flags`, `groups`, `groupindex`
+- [x] `re.sub` / `re.subn` macro replacement shared with `pattern.sub` / `pattern.subn` (escape once under autoescape)
+- [x] Update rule 14 in `CLAUDE.md` (`re.compile` is no longer out of scope)
 
 **Done when:** `{% set word = re.compile("\\w+", re.I) %}{{ word | pattern.findall(text) }}` works (the pattern is the piped value, as `self`) under both engines, and a catastrophic compiled pattern still times out under `[regex]`.
 

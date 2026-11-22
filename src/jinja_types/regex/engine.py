@@ -8,6 +8,7 @@ Pattern errors (`re.error`, with the position in its message) are translated the
 import importlib
 import re
 from abc import ABC
+from functools import lru_cache
 from types import ModuleType
 from typing import Any
 
@@ -23,10 +24,16 @@ class Match(ABC):  # noqa: B024 (only a marker: re.Match and regex.Match share n
     """Any match object of the active engine."""
 
 
+class Pattern(ABC):  # noqa: B024 (only a marker, as Match)
+    """Any compiled pattern of the active engine."""
+
+
 Match.register(re.Match)
+Pattern.register(re.Pattern)
 
 if regex is not None:
     Match.register(regex.Match)
+    Pattern.register(regex.Pattern)
 
 
 def call(function: str, /, *args: object, **kwargs: object) -> Any:  # noqa: ANN401 (engine result)
@@ -36,3 +43,22 @@ def call(function: str, /, *args: object, **kwargs: object) -> Any:  # noqa: ANN
         return getattr(re, function)(*args, **kwargs)
 
     return getattr(regex, function)(*args, timeout=CURRENT.get().regex_timeout, **kwargs)
+
+
+@lru_cache(maxsize=128)
+def compiled(module: ModuleType, pattern: str, flags: int) -> Any:  # noqa: ANN401 (engine result)
+    return module.compile(pattern, flags)
+
+
+def compile(pattern: str, flags: int = 0) -> Any:  # noqa: ANN401 (the stdlib name)
+    """Compile `pattern` with the active engine; cached per engine, pattern and flags."""
+    return compiled(regex or re, pattern, flags)
+
+
+def method(pattern: object, name: str, /, *args: object, **kwargs: object) -> Any:  # noqa: ANN401
+    """Call method `name` of a compiled pattern, with the configured timeout under `regex`."""
+
+    if regex is None or not isinstance(pattern, regex.Pattern):
+        return getattr(pattern, name)(*args, **kwargs)
+
+    return getattr(pattern, name)(*args, timeout=CURRENT.get().regex_timeout, **kwargs)

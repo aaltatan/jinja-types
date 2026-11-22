@@ -40,11 +40,20 @@ takes an IANA timezone name, e.g. `{{ moment | datetime.astimezone("Asia/Damascu
 Windows, install the `tzdata` package for timezone names to resolve.
 
 Regex filters take the string as the piped value and keep Python's parameter names:
-`{{ code | re.search("abc-(\d+)", flags=re.I) | match.group(1) }}`. Jinja string literals
-process backslash escapes, so write `\d` for the regex `\d`. `re.sub` also accepts a macro that
+`{{ code | re.search("abc-(\\d+)", flags=re.I) | match.group(1) }}`. Jinja string literals
+process backslash escapes, so write `\\d` for the regex `\d`. `re.sub` also accepts a macro that
 gets the match; under autoescape its output is kept as markup and the rest of the string is
 escaped once. With the `[regex]` extra, the `regex` library is used and every call is limited
 by `regex_timeout` (seconds, default 1.0).
+
+`re.compile(pattern, flags)` returns a compiled pattern (cached); its members are the `pattern`
+namespace, with the pattern piped in as in Python:
+
+```jinja
+{% set word = re.compile("\\w+", re.I) %}
+{{ word | pattern.findall(text) | join(", ") }}
+{% if word is pattern.fullmatch(name) %}one word{% endif %}
+```
 
 The full reference is in [docs/](docs/index.md), generated from the catalog. The same catalog is
 available from the command line:
@@ -76,8 +85,13 @@ from arapy import Currency, Gender, Noun
 
 qirsh = Noun.create("قرش", "قرشان", "قروش", gender=Gender.MASCULINE)
 syp = Currency.create(
-    code="SYP", singular="ليرة سورية", dual="ليرتان سوريتان", plural="ليرات سورية",
-    gender=Gender.FEMININE, subunit=qirsh, symbol="ل.س",
+    code="SYP",
+    singular="ليرة سورية",
+    dual="ليرتان سوريتان",
+    plural="ليرات سورية",
+    gender=Gender.FEMININE,
+    subunit=qirsh,
+    symbol="ل.س",
 )
 ```
 

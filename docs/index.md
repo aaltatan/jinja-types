@@ -15,6 +15,7 @@
 - [`list`](list.md): 11 members
 - [`match`](match.md): 13 members
 - [`path`](path.md): 20 members
+- [`pattern`](pattern.md): 12 members
 - [`re`](re.md): 9 members
 - [`str`](str.md): 46 members
 - [`time`](time.md): 13 members

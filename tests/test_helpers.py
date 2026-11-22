@@ -63,7 +63,7 @@ def test_globals_survive_reinstall_and_coexist_with_filters() -> None:
 
 def test_globals_are_sandbox_safe() -> None:
     assert render("{{ decimal.__class__ }}") == ""
-    assert render("{{ re.compile }}") == ""
+    assert render("{{ re.purge }}{{ re.compile.__func__ }}{{ re.compile.__self__ }}") == ""
     assert render("{{ decimal }} {{ re }}") == "<jinja_types decimal> <jinja_types re flags>"
 
 

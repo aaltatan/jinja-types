@@ -11,7 +11,8 @@ from typing import ClassVar
 from uuid import NAMESPACE_DNS, UUID
 from uuid import uuid5 as _uuid5
 
-from jinja_types.core import Collection
+from jinja_types.core import Collection, JinjaTypesError
+from jinja_types.regex import engine
 
 collection = Collection()
 
@@ -35,7 +36,7 @@ class DecimalNamespace:
 
 
 class ReFlags:
-    """The `re` global: regex flags only, short and long names."""
+    """The `re` global: regex flags (short and long names) and `compile`."""
 
     NOFLAG: ClassVar = _re.NOFLAG
     A: ClassVar = _re.A
@@ -52,6 +53,16 @@ class ReFlags:
     UNICODE: ClassVar = _re.UNICODE
     X: ClassVar = _re.X
     VERBOSE: ClassVar = _re.VERBOSE
+
+    def compile(self, pattern: str, flags: int = 0) -> object:
+        """Compile `pattern` with the active engine (cached); use it with `pattern.*`."""
+
+        try:
+            return engine.compile(pattern, flags)
+        except Exception as exc:  # re.error, regex.error, TypeError
+            message = f"{type(exc).__name__}: {exc}"
+
+            raise JinjaTypesError("re.compile", message, original=exc) from exc
 
     def __repr__(self) -> str:
         return "<jinja_types re flags>"
@@ -77,10 +88,13 @@ def decimal_namespace() -> DecimalNamespace:
 @collection.global_(
     member="re",
     constant=True,
-    examples=[("{{ re.I == 2 and re.IGNORECASE == re.I }}", {}, "True")],
+    examples=[
+        ("{{ re.I == 2 and re.IGNORECASE == re.I }}", {}, "True"),
+        ("{{ re.compile('a+', re.I) | pattern.findall('aAb') | join }}", {}, "aA"),
+    ],
 )
 def re_flags() -> ReFlags:
-    """The `re` flags object."""
+    """The `re` flags object, with `re.compile(pattern, flags=0)` for the `pattern` namespace."""
     return RE_FLAGS
 
 

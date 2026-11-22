@@ -39,6 +39,7 @@ NAMESPACES = [
     "list",
     "match",
     "path",
+    "pattern",
     "re",
     "str",
     "time",

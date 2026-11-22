@@ -54,7 +54,7 @@ strict = true
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
-module = "jinja_types.regex.re_"
+module = ["jinja_types.regex.re_", "jinja_types.regex.pattern_"]
 warn_return_any = false  # the engine (re or the untyped regex library) returns Any
 
 [tool.pytest.ini_options]

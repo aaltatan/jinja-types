@@ -12,7 +12,6 @@ requires-python = ">=3.12"
 keywords = ["jinja2", "jinja", "filters", "templates", "sandbox", "decimal", "dates", "regex", "arabic"]
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Framework :: Jinja",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",

@@ -31,15 +31,6 @@ def hour(value: datetime, /) -> int:
     return value.hour
 
 
-list_ns = Collection("list", list)
-
-
-@list_ns.filter(examples=[("{{ xs | list.append(3) }}", {"xs": [1, 2]}, "[1, 2, 3]")])
-def append(value: list[object], object: object, /) -> list[object]:
-    """Return a copy of the list with `object` appended."""
-    return [*value, object]
-
-
 helpers = Collection()
 
 
@@ -62,7 +53,7 @@ def answer() -> int:
 
 
 # date_ns and datetime_ns clash with the real namespaces; tests use them in bare registries.
-collections = [list_ns, helpers]
+collections = [helpers]
 bad_plugin = [date_ns, "not a collection"]
 
 

@@ -116,10 +116,10 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 7: Containers — `list`, `dict`
 
-- [ ] `list`: `index`, `count`, `copy`. **Copy-then-return** for `append`, `extend`, `insert`, `remove`, `reverse`, `sort(key=None, reverse=False)`, `clear`. `pop(index=-1)` returns the item (input untouched)
-- [ ] `dict`: `get`, `keys`, `values`, `items`, `copy`, `fromkeys` (classmethod style). Copy-then-return for `update`, `clear`. `pop`, `popitem` and `setdefault` return Python's value (input untouched)
-- [ ] `sort(key=...)` accepts a Jinja macro or an attribute name string (documented)
-- [ ] `test_no_mutation.py` covers every member
+- [x] `list`: `index`, `count`, `copy`. **Copy-then-return** for `append`, `extend`, `insert`, `remove`, `reverse`, `sort(key=None, reverse=False)`, `clear`. `pop(index=-1)` returns the item (input untouched)
+- [x] `dict`: `get`, `keys`, `values`, `items`, `copy`, `fromkeys` (classmethod style). Copy-then-return for `update`, `clear`. `pop`, `popitem` and `setdefault` return Python's value (input untouched)
+- [x] `sort(key=...)` accepts a Jinja macro or an attribute name string (documented)
+- [x] `test_no_mutation.py` covers every member
 
 **Done when:** containers pass examples, parity (against copies) and no-mutation.
 

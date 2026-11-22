@@ -30,9 +30,11 @@ NAMESPACES = [
     "date",
     "datetime",
     "decimal",
+    "dict",
     "float",
     "fraction",
     "int",
+    "list",
     "match",
     "re",
     "str",
@@ -506,7 +508,7 @@ def test_registry_lookup_and_copy() -> None:
 
     copied.include(Collection("extra", int))
 
-    demo_names = sorted([*NAMESPACES, "list"])
+    demo_names = NAMESPACES
 
     assert [ns.name for ns in registry.namespaces()] == demo_names
     assert [ns.name for ns in copied.namespaces()] == sorted([*demo_names, "extra"])

@@ -491,16 +491,16 @@ def test_registry_lookup_and_copy() -> None:
 
     copied.include(Collection("extra", int))
 
-    assert [ns.name for ns in registry.namespaces()] == ["date", "datetime", "list"]
-    assert [ns.name for ns in copied.namespaces()] == ["date", "datetime", "extra", "list"]
+    assert [ns.name for ns in registry.namespaces()] == ["date", "datetime", "list", "str"]
+    assert [ns.name for ns in copied.namespaces()] == ["date", "datetime", "extra", "list", "str"]
     assert render("{{ d | date.year }}", copied, context={"d": demo.MOMENT}) == "2026"
 
     with pytest.raises(KeyError):
         registry.get("date.nope")
 
 
-def test_default_registry_has_no_namespaces_yet() -> None:
-    assert Registry.default().namespaces() == []
+def test_default_registry_namespaces() -> None:
+    assert [ns.name for ns in Registry.default().namespaces()] == ["str"]
 
 
 # --- plugins ---------------------------------------------------------------------------------

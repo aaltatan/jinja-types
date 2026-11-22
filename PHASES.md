@@ -64,9 +64,9 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 3: `str`
 
-- [ ] All public `str` methods except `maketrans` (static; only as a helper if needed): case, align/pad, strip, split/partition, find/index/count, startswith/endswith (tuple prefixes allowed), replace, removeprefix/suffix, join (`{{ ", " | str.join(items) }}`, mirroring Python), format, format_map, translate, encode, expandtabs, zfill, splitlines, all `is*` predicates (filters + tests)
-- [ ] Examples for every member; parity test against the real methods
-- [ ] Autoescape check: output stays plain `str`, so Jinja escapes it once
+- [x] All public `str` methods except `maketrans` (static; only as a helper if needed): case, align/pad, strip, split/partition, find/index/count, startswith/endswith (tuple prefixes allowed), replace, removeprefix/suffix, join (`{{ ", " | str.join(items) }}`, mirroring Python), format, format_map, translate, encode, expandtabs, zfill, splitlines, all `is*` predicates (filters + tests)
+- [x] Examples for every member; parity test against the real methods
+- [x] Autoescape check: output stays plain `str`, so Jinja escapes it once
 
 **Done when:** every `str` member is in the catalog with examples, and parity, examples and mypy are all green.
 

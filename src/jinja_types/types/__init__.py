@@ -1,10 +1,13 @@
-"""Built-in collections, one module per namespace (added from Phase 3 on)."""
+"""Built-in collections, one module per namespace."""
 
 from jinja_types.core.collection import Collection
 
 
 def builtin_collections() -> list[Collection]:
     """Return every built-in collection, in registration order."""
-    from jinja_types import helpers  # local: helpers import core, which imports this lazily
+    # local: these modules import core, which imports this module lazily
+    from jinja_types import helpers
 
-    return [*helpers.collections]
+    from . import str_
+
+    return [*helpers.collections, str_.collection]

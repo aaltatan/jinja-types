@@ -33,6 +33,8 @@ NAMESPACES = [
     "float",
     "fraction",
     "int",
+    "match",
+    "re",
     "str",
     "time",
     "timedelta",

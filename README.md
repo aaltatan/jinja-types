@@ -38,3 +38,10 @@ when one exists, so `{{ moment | date.isoformat(" ", "seconds") }}` works on a d
 `datetime.*` namespace holds only what `datetime` adds or overrides. `datetime.astimezone` also
 takes an IANA timezone name, e.g. `{{ moment | datetime.astimezone("Asia/Damascus") }}`; on
 Windows, install the `tzdata` package for timezone names to resolve.
+
+Regex filters take the string as the piped value and keep Python's parameter names:
+`{{ code | re.search("abc-(\d+)", flags=re.I) | match.group(1) }}`. Jinja string literals
+process backslash escapes, so write `\d` for the regex `\d`. `re.sub` also accepts a macro that
+gets the match; under autoescape its output is kept as markup and the rest of the string is
+escaped once. With the `[regex]` extra, the `regex` library is used and every call is limited
+by `regex_timeout` (seconds, default 1.0).

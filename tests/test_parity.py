@@ -16,7 +16,8 @@ from jinja_types import Kind, install
 from jinja_types.core import Example, MemberSpec
 
 REGISTRY = demo_registry()
-TYPE_SPECS = [spec for spec in REGISTRY.specs() if spec.namespace.name is not None]
+# `re.*` wraps module functions, not type members
+TYPE_SPECS = [spec for spec in REGISTRY.specs() if spec.namespace.name not in (None, "re")]
 CASES = [
     pytest.param(example, id=f"{spec.name}-{i}")
     for spec in TYPE_SPECS

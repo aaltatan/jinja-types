@@ -42,6 +42,10 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "ANN"]
 strict = true
 files = ["src", "tests"]
 
+[[tool.mypy.overrides]]
+module = "jinja_types.regex.re_"
+warn_return_any = false  # the engine (re or the untyped regex library) returns Any
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=jinja_types.core --cov-report=term-missing:skip-covered"

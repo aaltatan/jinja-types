@@ -5,12 +5,13 @@ from .collection import Collection, build_spec, type_repr
 from .errors import BuiltinClashError, DuplicateMemberError, JinjaTypesError, RegistryError
 from .invoker import Invoker
 from .namespace import Namespace
-from .options import Options, OptionsKwargs
+from .options import CURRENT, Options, OptionsKwargs
 from .plugins import PLUGIN_GROUP, load_plugins
 from .registry import Conflict, Registry
 from .spec import Example, Kind, MemberSpec, Param
 
 __all__ = [
+    "CURRENT",
     "PLUGIN_GROUP",
     "BuiltinClashError",
     "Catalog",

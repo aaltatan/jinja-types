@@ -8,7 +8,7 @@ from collections.abc import Callable, Mapping
 from jinja2 import TemplateError, Undefined
 
 from .errors import JinjaTypesError
-from .options import Options
+from .options import CURRENT, Options
 from .registry import Registry
 from .spec import MemberSpec
 
@@ -171,18 +171,28 @@ class Invoker:
         """Call `target` and translate any non-Jinja exception into `JinjaTypesError`."""
 
         typed = spec.namespace.name is not None
-        hint = f"check the arguments: {signature(target)}"
+        token = CURRENT.set(self.options)
 
         try:
             return target.func(*args, **kwargs)
         except TemplateError:
             raise
         except Exception as exc:
+            hint = None
+
+            if isinstance(exc, TypeError):
+                hint = f"check the arguments: {signature(target)}"
+
+            elif isinstance(exc, TimeoutError):
+                hint = "simplify the pattern, or install with a larger regex_timeout"
+
             raise JinjaTypesError(
                 spec.name,
                 f"{type(exc).__name__}: {exc}",
                 value_type=type(args[0]).__name__ if args and target.input_type else None,
                 supported=self.registry.supported(spec.namespace) if typed else (),
-                hint=hint if isinstance(exc, TypeError) else None,
+                hint=hint,
                 original=exc,
             ) from exc
+        finally:
+            CURRENT.reset(token)

@@ -99,12 +99,12 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 6: Regex — `re.*`, `match.*`
 
-- [ ] `regex/engine.py`: chooses stdlib `re` or the `regex` library (extra), applies `regex_timeout`, and maps timeouts and `re.error` (with position) to `JinjaTypesError`
-- [ ] `re` namespace (value is the string): `search`, `match`, `fullmatch`, `findall`, `finditer`, `sub`, `subn`, `split`, `escape`. Python parameter names: `pattern`, `repl`, `count`, `maxsplit`, `flags`
-- [ ] `re.search` / `re.match` / `re.fullmatch` also registered as **tests** (true when a match is found)
-- [ ] `repl` may be a string (`\1`, `\g<name>`) or a Jinja macro receiving the Match; the macro result is converted with `str()` so autoescape works once
-- [ ] `match` namespace: `group`, `groups`, `groupdict`, `span`, `start`, `end`, `expand`; attributes `string`, `re`, `pos`, `endpos`, `lastindex`, `lastgroup`
-- [ ] `re` global exposes flags only (`I M S X A U L`, long names too)
+- [x] `regex/engine.py`: chooses stdlib `re` or the `regex` library (extra), applies `regex_timeout`, and maps timeouts and `re.error` (with position) to `JinjaTypesError`
+- [x] `re` namespace (value is the string): `search`, `match`, `fullmatch`, `findall`, `finditer`, `sub`, `subn`, `split`, `escape`. Python parameter names: `pattern`, `repl`, `count`, `maxsplit`, `flags`
+- [x] `re.search` / `re.match` / `re.fullmatch` also registered as **tests** (true when a match is found)
+- [x] `repl` may be a string (`\1`, `\g<name>`) or a Jinja macro receiving the Match; the macro result is converted with `str()` so autoescape works once
+- [x] `match` namespace: `group`, `groups`, `groupdict`, `span`, `start`, `end`, `expand`; attributes `string`, `re`, `pos`, `endpos`, `lastindex`, `lastgroup`
+- [x] `re` global exposes flags only (`I M S X A U L`, long names too)
 
 **Done when:**
 - `{{ "ABC-42" | re.search("abc-(\d+)", flags=re.I) | match.group(1) }}` gives `42`.

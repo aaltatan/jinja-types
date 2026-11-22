@@ -1,5 +1,6 @@
 """Render-time options."""
 
+from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import TypedDict
 
@@ -21,3 +22,7 @@ class OptionsKwargs(TypedDict, total=False):
     coerce: bool
     regex_timeout: float
     locale: str | None
+
+
+CURRENT: ContextVar[Options] = ContextVar("jinja_types_options", default=Options())  # noqa: B039 (frozen)
+"""The options of the install running the current member, for wrappers that need them (regex)."""

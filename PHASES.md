@@ -50,11 +50,11 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 2: Helpers and globals
 
-- [ ] `fmt(value, spec="")` → `format(value, spec)`. Works for numbers, Decimal and dates (`{{ d | fmt('%Y-%m-%d') }}`)
-- [ ] Converters: `to_str`, `to_int`, `to_float`, `to_bool` (strict accepted strings; documented), `to_decimal`, `to_fraction`, `to_date` / `to_datetime` / `to_time` (ISO by default, optional `format=` for strptime), `to_timedelta` (seconds, or `days=`/`hours=` kwargs), `to_uuid`, `to_path`
-- [ ] Each namespace's `parse` is wired to the matching converter, used by `coerce=True`
-- [ ] Globals: `decimal` (Decimal, Context, all `ROUND_*`), `re` (flags only), `today()`, `now(tz=None)`
-- [ ] Clash check: none of the helper names is a Jinja built-in
+- [x] `fmt(value, spec="")` → `format(value, spec)`. Works for numbers, Decimal and dates (`{{ d | fmt('%Y-%m-%d') }}`)
+- [x] Converters: `to_str`, `to_int`, `to_float`, `to_bool` (strict accepted strings; documented), `to_decimal`, `to_fraction`, `to_date` / `to_datetime` / `to_time` (ISO by default, optional `format=` for strptime), `to_timedelta` (seconds, or `days=`/`hours=` kwargs), `to_uuid`, `to_path`
+- [x] Each namespace's `parse` is wired to the matching converter, used by `coerce=True`
+- [x] Globals: `decimal` (Decimal, Context, all `ROUND_*`), `re` (flags only), `today()`, `now(tz=None)`
+- [x] Clash check: none of the helper names is a Jinja built-in
 
 **Done when:** `{{ "1500.5" | to_decimal | fmt(",.2f") }}` gives `1,500.50` and `{{ "05/01/2026" | to_date(format="%d/%m/%Y") | fmt("%A") }}` gives `Monday`. Both `coerce` modes and `none_passthrough` are tested.
 

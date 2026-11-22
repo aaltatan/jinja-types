@@ -46,3 +46,5 @@ class MemberSpec:
     examples: tuple[Example, ...]
     source: str = "jinja_types"
     replaced: bool = False
+    constant: bool = False
+    """A global whose value is `func()` rather than `func` itself."""

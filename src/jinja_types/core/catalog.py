@@ -23,6 +23,7 @@ class CatalogEntry:
     examples: tuple[Example, ...]
     source: str
     replaced: bool
+    constant: bool
 
     @classmethod
     def from_spec(cls, spec: MemberSpec) -> Self:
@@ -37,6 +38,7 @@ class CatalogEntry:
             examples=spec.examples,
             source=spec.source,
             replaced=spec.replaced,
+            constant=spec.constant,
         )
 
 

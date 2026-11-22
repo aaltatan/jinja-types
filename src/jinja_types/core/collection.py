@@ -49,6 +49,7 @@ def build_spec(
     member: str | None = None,
     examples: Iterable[Example] = (),
     test: bool | None = None,
+    constant: bool = False,
     source: str = "jinja_types",
 ) -> MemberSpec:
     """Build a spec from a wrapper's own signature and type hints."""
@@ -75,6 +76,9 @@ def build_spec(
     if kind is Kind.GLOBAL:
         if namespace.name is not None:
             raise RegistryError(f"{name}: globals belong in the helper namespace (namespace=None)")
+
+        if constant and params:
+            raise RegistryError(f"{name}: a constant global is built by a no-argument factory")
 
     else:
         if not params or params[0].kind is not inspect.Parameter.POSITIONAL_ONLY:
@@ -111,6 +115,7 @@ def build_spec(
         doc=inspect.getdoc(func) or "",
         examples=tuple(examples),
         source=source,
+        constant=constant,
     )
 
 
@@ -168,14 +173,28 @@ class Collection:
         return self._register(Kind.ATTRIBUTE, member, examples, None)
 
     def global_[F: Callable[..., object]](
-        self, *, member: str | None = None, examples: Iterable[Example] = ()
+        self,
+        *,
+        member: str | None = None,
+        examples: Iterable[Example] = (),
+        constant: bool = False,
     ) -> Callable[[F], F]:
-        """Register a global callable (helper namespace only)."""
+        """Register a global callable (helper namespace only).
 
-        return self._register(Kind.GLOBAL, member, examples, None)
+        With `constant=True` the function is a no-argument factory, and the global is the
+        object it returns (for example the `decimal` namespace object). The factory must return
+        the same object every time, so installing twice is not seen as a clash.
+        """
+
+        return self._register(Kind.GLOBAL, member, examples, None, constant)
 
     def _register[F: Callable[..., object]](
-        self, kind: Kind, member: str | None, examples: Iterable[Example], test: bool | None
+        self,
+        kind: Kind,
+        member: str | None,
+        examples: Iterable[Example],
+        test: bool | None,
+        constant: bool = False,
     ) -> Callable[[F], F]:
         def register(func: F) -> F:
             spec = build_spec(
@@ -185,6 +204,7 @@ class Collection:
                 member=member,
                 examples=examples,
                 test=test,
+                constant=constant,
                 source=self.source,
             )
 

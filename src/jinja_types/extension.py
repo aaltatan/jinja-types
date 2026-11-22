@@ -37,8 +37,9 @@ def install(
 
         for kinds, label, table in tables:
             existing = table.get(spec.name)
+            ours = hasattr(existing, MARK) or (spec.constant and existing is spec.func())
 
-            if spec.kinds & kinds and existing is not None and not hasattr(existing, MARK):
+            if spec.kinds & kinds and existing is not None and not ours:
                 raise BuiltinClashError(
                     f"{spec.name!r} clashes with the existing Jinja {label} of the same name"
                 )
@@ -53,7 +54,7 @@ def install(
             env.tests[spec.name] = invoker.test(spec)
 
         if spec.kinds & Kind.GLOBAL:
-            env.globals[spec.name] = invoker.global_(spec)
+            env.globals[spec.name] = spec.func() if spec.constant else invoker.global_(spec)
 
     return registry
 

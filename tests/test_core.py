@@ -499,8 +499,8 @@ def test_registry_lookup_and_copy() -> None:
         registry.get("date.nope")
 
 
-def test_default_registry_is_empty_for_now() -> None:
-    assert Registry.default().specs() == []
+def test_default_registry_has_no_namespaces_yet() -> None:
+    assert Registry.default().namespaces() == []
 
 
 # --- plugins ---------------------------------------------------------------------------------

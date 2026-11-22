@@ -177,8 +177,6 @@ Plugins are loaded only when `load_plugins()` is called, or with `Registry.defau
 
 ## Deferred / out of scope for v1
 
-- Arabic filters: these come from **arapy** as a plugin once arapy is finished.
-- `re.compile` and Pattern members.
 - A JS or browser port. templify renders in Python only; the JSON catalog keeps a port possible.
 - Locale formatting beyond the `[babel]` extra.
 

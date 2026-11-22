@@ -156,7 +156,29 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ---
 
-## Phase 11: templify integration and 0.1.0 release
+## Phase 11: arapy plugin (Arabic)
+
+- [ ] In **arapy** (`../arapy`): `arapy/jinja.py` exports `collections`, behind an optional extra `arapy[jinja]` (`jinja-types`); entry point `arapy = "arapy.jinja:collections"` in group `jinja_types.plugins`
+- [ ] Namespace `ar` (plain helpers would clash too easily): `ar.to_words` / `ar.format_money` (tafqeet), `ar.to_arabic_digits`, `ar.to_latin_digits`, `ar.to_persian_digits`, `ar.format_number`, `ar.format_percent`, `ar.parse_number`, `ar.ordinal`, `ar.ordinal_adverb`, `ar.normalize` / `ar.equals` (test) / `ar.sort`, `ar.shape` (needs `arapy[shape]`), `ar.date` / `ar.datetime` formatting via `ArDate` / `ArDateTime`
+- [ ] Wrappers follow the jinja-types conventions (typed, one docstring, ≥1 example each); arapy errors (`ArapyError`) surface as `JinjaTypesError` with a hint
+- [ ] jinja-types side: an integration test that runs when arapy is installed (`Registry.default(plugins=True)` sees `source == "arapy"`), skipped otherwise; plugin docs page generated
+
+**Done when:** `{{ salary | ar.format_money("SYP") }}` renders the amount in Arabic words through the plugin entry point, and both repos' suites pass.
+
+---
+
+## Phase 12: `re.compile` and the `pattern` namespace
+
+- [ ] `re.compile(pattern, flags=0)` on the `re` global (alongside the flags), engine-aware, with a small cache; with `[regex]` the timeout still applies
+- [ ] `pattern` namespace (value is a compiled Pattern): `search`, `match`, `fullmatch` (also tests), `findall`, `finditer`, `sub`, `subn`, `split` with `pos` / `endpos` where Python has them; attributes `pattern`, `flags`, `groups`, `groupindex`
+- [ ] `re.sub` / `re.subn` macro replacement shared with `pattern.sub` / `pattern.subn` (escape once under autoescape)
+- [ ] Update rule 14 in `CLAUDE.md` (`re.compile` is no longer out of scope)
+
+**Done when:** `{% set word = re.compile("\\w+", re.I) %}{{ word | pattern.findall(text) }}` works (the pattern is the piped value, as `self`) under both engines, and a catastrophic compiled pattern still times out under `[regex]`.
+
+---
+
+## Phase 13: templify integration and 0.1.0 release
 
 - [ ] templify depends on `jinja-types` and calls `install(env, …)` on its sandboxed env
 - [ ] templify reads `registry.catalog()` for autocomplete and validation
@@ -169,6 +191,4 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Later (not v1)
 
-- arapy plugin (Arabic: amount in words, digits, dates), shipped from arapy through the `jinja_types.plugins` entry point
-- `re.compile` global and `pattern.*` members
 - Extra families (base64, hashing, JSON, URL parsing) as separate collections

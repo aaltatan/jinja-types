@@ -43,3 +43,7 @@ files = ["src", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--cov=jinja_types.core --cov-report=term-missing:skip-covered"
+
+[tool.coverage.report]
+fail_under = 95

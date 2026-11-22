@@ -24,19 +24,19 @@ and one commit, or more. Tick the boxes as you go. Do not start a phase before t
 
 The heart of the package. Build it against a tiny **demo collection** in the tests, not real types.
 
-- [ ] `core/errors.py`: `JinjaTypesError(TemplateRuntimeError)` with `filter_name`, `value_type`, `supported`, `hint`, `__cause__`. Also `RegistryError`, `DuplicateMemberError`, `BuiltinClashError`
-- [ ] `core/spec.py`: `Kind` (Flag: FILTER, TEST, ATTRIBUTE, GLOBAL), `Param`, `MemberSpec` (frozen, slots)
-- [ ] `core/namespace.py`: `Namespace(name, type, parse=None)`. `None` namespace means plain-name helpers
-- [ ] `core/collection.py`: `Collection(namespace, type, parse=None)` with decorators `.filter`, `.test`, `.attribute`, `.global_`, each accepting `member=`, `examples=`. Specs are built from `typing.get_type_hints` and `inspect.signature` of **our wrapper**. A `bool` return auto-adds `TEST`. Missing annotations raise `RegistryError` at decoration time
-- [ ] `core/registry.py`: `Registry.include(*collections, replace=False)`, `get(name)`, `specs()`, `namespaces()`, `conflicts()`, `copy()`
-  - [ ] Duplicate qualified name → `DuplicateMemberError` unless `replace=True`, which is recorded in `conflicts()`
-  - [ ] MRO dispatch table: for `ns.member` and a value of type `T`, walk `T.__mro__` up to the namespace type and pick the most specific registered `<ns_of(cls)>.member`
-- [ ] `core/options.py`: frozen `Options(none_passthrough=False, coerce=False, regex_timeout=1.0, locale=None)`
-- [ ] `core/invoker.py`: one wrapper per spec that does passthrough → coerce → isinstance check → dispatch → call → translate exceptions into `JinjaTypesError` with a hint. Hint rules live in one table, e.g. "str given to a date namespace → suggest `to_date` / `date.fromisoformat`"
-- [ ] `extension.py`: `TypesExtension` (Jinja `Extension`), `TypesExtension.configure(**opts)` returning a subclass, and `install(env, registry=None, **opts)`. Install registers filters, tests and globals, and raises `BuiltinClashError` if a plain helper name is already a filter or test in that env
-- [ ] `core/plugins.py`: `load_plugins(registry, group="jinja_types.plugins")`, which accepts a Collection or an iterable of them
-- [ ] `core/catalog.py`: `CatalogEntry`, `Catalog`, `registry.catalog()`, `Catalog.to_dict()/to_json()`
-- [ ] Test harness: `tests/test_examples.py`, `test_catalog.py` and `test_no_mutation.py`, generic over `Registry.default()` (empty for now) plus the demo collection
+- [x] `core/errors.py`: `JinjaTypesError(TemplateRuntimeError)` with `filter_name`, `value_type`, `supported`, `hint`, `__cause__`. Also `RegistryError`, `DuplicateMemberError`, `BuiltinClashError`
+- [x] `core/spec.py`: `Kind` (Flag: FILTER, TEST, ATTRIBUTE, GLOBAL), `Param`, `MemberSpec` (frozen, slots)
+- [x] `core/namespace.py`: `Namespace(name, type, parse=None)`. `None` namespace means plain-name helpers
+- [x] `core/collection.py`: `Collection(namespace, type, parse=None)` with decorators `.filter`, `.test`, `.attribute`, `.global_`, each accepting `member=`, `examples=`. Specs are built from `typing.get_type_hints` and `inspect.signature` of **our wrapper**. A `bool` return auto-adds `TEST`. Missing annotations raise `RegistryError` at decoration time
+- [x] `core/registry.py`: `Registry.include(*collections, replace=False)`, `get(name)`, `specs()`, `namespaces()`, `conflicts()`, `copy()`
+  - [x] Duplicate qualified name → `DuplicateMemberError` unless `replace=True`, which is recorded in `conflicts()`
+  - [x] MRO dispatch table: for `ns.member` and a value of type `T`, walk `T.__mro__` up to the namespace type and pick the most specific registered `<ns_of(cls)>.member`
+- [x] `core/options.py`: frozen `Options(none_passthrough=False, coerce=False, regex_timeout=1.0, locale=None)`
+- [x] `core/invoker.py`: one wrapper per spec that does passthrough → coerce → isinstance check → dispatch → call → translate exceptions into `JinjaTypesError` with a hint. Hint rules live in one table, e.g. "str given to a date namespace → suggest `to_date` / `date.fromisoformat`"
+- [x] `extension.py`: `TypesExtension` (Jinja `Extension`), `TypesExtension.configure(**opts)` returning a subclass, and `install(env, registry=None, **opts)`. Install registers filters, tests and globals, and raises `BuiltinClashError` if a plain helper name is already a filter or test in that env
+- [x] `core/plugins.py`: `load_plugins(registry, group="jinja_types.plugins")`, which accepts a Collection or an iterable of them
+- [x] `core/catalog.py`: `CatalogEntry`, `Catalog`, `registry.catalog()`, `Catalog.to_dict()/to_json()`
+- [x] Test harness: `tests/test_examples.py`, `test_catalog.py` and `test_no_mutation.py`, generic over `Registry.default()` (empty for now) plus the demo collection
 
 **Done when:**
 - Dotted filters and tests render in `ImmutableSandboxedEnvironment`.

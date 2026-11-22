@@ -6,11 +6,33 @@ readme = "README.md"
 authors = [
     { name = "aaltatan", email = "a.altatan@gmail.com" }
 ]
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
+keywords = ["jinja2", "jinja", "filters", "templates", "sandbox", "decimal", "dates", "regex", "arabic"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Jinja",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Markup",
+    "Typing :: Typed",
+]
 dependencies = [
     "arapy>=0.1.0",
     "jinja2>=3.1",
 ]
+
+[project.urls]
+Homepage = "https://github.com/aaltatan/jinja-types"
+Repository = "https://github.com/aaltatan/jinja-types"
+Issues = "https://github.com/aaltatan/jinja-types/issues"
+Changelog = "https://github.com/aaltatan/jinja-types/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/aaltatan/jinja-types/tree/main/docs"
 
 [project.optional-dependencies]
 regex = ["regex"]

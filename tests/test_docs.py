@@ -14,6 +14,7 @@ from jinja_types.core.catalog import signature
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = json.loads((ROOT / "schema" / "catalog.schema.json").read_text(encoding="utf-8"))
+HAND_WRITTEN = {"plugins.md"}  # not generated from the catalog
 
 
 def test_catalog_export_matches_the_schema() -> None:
@@ -62,7 +63,9 @@ def test_generated_docs_are_up_to_date() -> None:
 
     expected = pages(Registry.default().catalog())
 
-    assert sorted(path.name for path in docs.glob("*.md")) == sorted(expected)
+    written = sorted(path.name for path in docs.glob("*.md") if path.name not in HAND_WRITTEN)
+
+    assert written == sorted(expected)
 
     for name, text in expected.items():
         assert (docs / name).read_text(encoding="utf-8") == text, (

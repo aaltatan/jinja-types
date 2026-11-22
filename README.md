@@ -83,6 +83,8 @@ jinja-types catalog --kind test            # JSON, see schema/catalog.schema.jso
 jinja-types conflicts --plugins
 ```
 
+To add your own filter sets as an installable plugin, see [docs/plugins.md](docs/plugins.md).
+
 With the `[babel]` extra, `babel.*` formats numbers, money and dates for a locale. The locale
 is the `locale=` argument, else `TypesExtension.configure(locale="ar_SY")`, else `en_US`:
 

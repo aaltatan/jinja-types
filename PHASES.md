@@ -183,10 +183,11 @@ Arabic filters ship in `Registry.default()` like every other built-in collection
 
 ## Phase 13: templify integration and 0.1.0 release
 
-- [ ] templify depends on `jinja-types` and adds it as an extension on its sandboxed env (`extensions=[TypesExtension.configure(…)]`), not through `install()`
-- [ ] templify reads `registry.catalog()` for autocomplete and validation
-- [ ] Plugin author guide (`docs/plugins.md`) with a full example collection and an entry point
-- [ ] CHANGELOG, version `0.1.0`, publish to PyPI (trusted publishing)
+- [x] templify depends on `jinja-types` and adds it as an extension on its sandboxed env (`extensions=[TypesExtension.configure(…)]`), not through `install()`
+- [x] templify reads `registry.catalog()` for autocomplete and validation
+- [x] Plugin author guide (`docs/plugins.md`) with a full example collection and an entry point
+- [x] CHANGELOG, version `0.1.0`, LICENSE, PyPI metadata, release workflow (trusted publishing)
+- [ ] Publish: push to GitHub, add the `pypi` trusted publisher, publish the v0.1.0 release; then templify drops its local path source
 
 **Done when:** templify renders a real template (salary letter / fee table) using only qualified jinja-types filters.
 

@@ -223,13 +223,8 @@ def to_uuid(value: str | UUID, /) -> UUID:
 
 
 @collection.filter(
-    examples=[
-        (
-            "{{ 'docs/readme.md' | to_path | fmt }}",
-            {},
-            str(PurePath("docs/readme.md")),
-        )
-    ]
+    # path.as_posix: the platform's separator would make the generated docs differ per OS
+    examples=[("{{ 'docs/readme.md' | to_path | path.as_posix }}", {}, "docs/readme.md")]
 )
 def to_path(value: str | PurePath, /) -> PurePath:
     """Convert to a `PurePath` (never touches the disk)."""

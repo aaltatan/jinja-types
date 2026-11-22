@@ -134,7 +134,7 @@ Convert to `int`. `base` applies to strings; numbers are truncated like `int()`.
 
 Convert to a `PurePath` (never touches the disk).
 
-- ``{{ 'docs/readme.md' | to_path | fmt }}`` → ``docs\readme.md``
+- ``{{ 'docs/readme.md' | to_path | path.as_posix }}`` → ``docs/readme.md``
 
 ## `to_str`
 

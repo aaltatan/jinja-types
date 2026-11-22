@@ -137,10 +137,10 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 9: Catalog export and CLI
 
-- [ ] `jinja-types catalog [--namespace NS] [--kind filter|test|attribute|global] [--format json|markdown]`
-- [ ] `jinja-types conflicts`, which prints `registry.conflicts()`
-- [ ] Docs generator: `scripts/gen_docs.py` writes one Markdown page per namespace from the catalog (examples included)
-- [ ] JSON schema for the catalog committed under `schema/catalog.schema.json`, with a test that the export validates against it
+- [x] `jinja-types catalog [--namespace NS] [--kind filter|test|attribute|global] [--format json|markdown]`
+- [x] `jinja-types conflicts`, which prints `registry.conflicts()`
+- [x] Docs generator: `scripts/gen_docs.py` writes one Markdown page per namespace from the catalog (examples included)
+- [x] JSON schema for the catalog committed under `schema/catalog.schema.json`, with a test that the export validates against it
 
 **Done when:** the CLI works on the default registry plus a fake plugin, and the generated docs are committed.
 

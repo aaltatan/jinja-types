@@ -45,3 +45,12 @@ process backslash escapes, so write `\d` for the regex `\d`. `re.sub` also accep
 gets the match; under autoescape its output is kept as markup and the rest of the string is
 escaped once. With the `[regex]` extra, the `regex` library is used and every call is limited
 by `regex_timeout` (seconds, default 1.0).
+
+The full reference is in [docs/](docs/index.md), generated from the catalog. The same catalog is
+available from the command line:
+
+```
+jinja-types catalog --namespace str --format markdown
+jinja-types catalog --kind test            # JSON, see schema/catalog.schema.json
+jinja-types conflicts --plugins
+```

@@ -67,3 +67,88 @@ class Catalog:
     def to_json(self, *, indent: int | None = 2) -> str:
         """Export as JSON. Non-JSON example context values are written as `repr()`."""
         return json.dumps(self.to_dict(), indent=indent, default=repr, ensure_ascii=False)
+
+    def namespaces(self) -> list[str]:
+        """Return the namespace labels in use, sorted (`helpers` for plain names)."""
+        return sorted({label(entry) for entry in self.entries})
+
+    def select(self, *, namespace: str | None = None, kind: str | None = None) -> Self:
+        """Keep the entries in `namespace` (a label, see `namespaces`) and with `kind`."""
+
+        return type(self)(
+            tuple(
+                entry
+                for entry in self.entries
+                if namespace in (None, label(entry)) and kind in (None, *entry.kinds)
+            )
+        )
+
+    def to_markdown(self) -> str:
+        """Export as Markdown: one `#` section per namespace, one `##` section per member."""
+
+        lines: list[str] = []
+
+        for namespace in self.namespaces():
+            lines += [f"# `{namespace}`", ""]
+
+            for entry in self.select(namespace=namespace):
+                lines += entry_markdown(entry)
+
+        return "\n".join(lines)
+
+
+def label(entry: CatalogEntry) -> str:
+    """The namespace label: the namespace name, or `helpers` for plain names."""
+    return entry.namespace or "helpers"
+
+
+def signature(entry: CatalogEntry) -> str:
+    """Return a Python-style signature, e.g. `str.zfill(value: str, /, width: int) -> str`."""
+
+    parts = [] if entry.input_type is None else [f"value: {entry.input_type}"]
+    positional_only = entry.input_type is not None
+    starred = False
+
+    for param in entry.params:
+        if positional_only and param.kind != "positional_only":
+            parts.append("/")
+            positional_only = False
+
+        if param.kind == "keyword_only" and not starred:
+            parts.append("*")
+
+        prefix = {"var_positional": "*", "var_keyword": "**"}.get(param.kind, "")
+        default = "" if param.default is None else f" = {param.default}"
+        starred = starred or param.kind in ("var_positional", "keyword_only")
+
+        parts.append(f"{prefix}{param.name}: {param.annotation}{default}")
+
+    if positional_only:
+        parts.append("/")
+
+    return f"{entry.name}({', '.join(parts)}) -> {entry.returns}"
+
+
+def entry_markdown(entry: CatalogEntry) -> list[str]:
+    """Return the Markdown lines for one member."""
+
+    tags = [*entry.kinds]
+
+    if entry.classmethod:
+        tags.append("classmethod")
+
+    if entry.source != "jinja_types":
+        tags.append(f"from {entry.source}" + (" (replaced)" if entry.replaced else ""))
+
+    lines = [f"## `{entry.name}`", "", f"`{signature(entry)}`", "", f"*{', '.join(tags)}*", ""]
+
+    if entry.doc:
+        lines += [entry.doc, ""]
+
+    for template, context, output in entry.examples:
+        given = ", ".join(f"`{key} = {value!r}`" for key, value in context.items())
+        suffix = f" with {given}" if given else ""
+
+        lines.append(f"- ``{template}``{suffix} → ``{output}``")
+
+    return [*lines, ""]

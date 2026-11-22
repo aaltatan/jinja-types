@@ -1,5 +1,7 @@
 """Built-in collections, one module per namespace."""
 
+from importlib.util import find_spec
+
 from jinja_types.core.collection import Collection
 
 
@@ -44,5 +46,10 @@ def builtin_collections() -> list[Collection]:
         re_,
         match_,
     ]
+
+    if find_spec("babel") is not None:  # the [babel] extra
+        from jinja_types.contrib import babel
+
+        modules.append(babel)
 
     return [*helpers.collections, *(module.collection for module in modules)]

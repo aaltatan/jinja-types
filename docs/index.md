@@ -2,6 +2,7 @@
 
 # jinja-types reference
 
+- [`babel`](babel.md): 8 members
 - [`date`](date.md): 16 members
 - [`datetime`](datetime.md): 23 members
 - [`decimal`](decimal.md): 55 members

@@ -54,3 +54,16 @@ jinja-types catalog --namespace str --format markdown
 jinja-types catalog --kind test            # JSON, see schema/catalog.schema.json
 jinja-types conflicts --plugins
 ```
+
+With the `[babel]` extra, `babel.*` formats numbers, money and dates for a locale. The locale
+is the `locale=` argument, else `install(env, locale="ar_SY")`, else `en_US`:
+
+```jinja
+{{ salary | babel.format_currency("USD") }}                                   {# $1,234.50 (en_US) #}
+{{ salary | babel.format_currency("SYP", locale="ar_SY", currency_digits=false) }}  {# ‏1,234.50 ل.س.‏ #}
+{{ salary | babel.format_decimal(locale="ar_SY", numbering_system="default") }}  {# 1٬234٫5 #}
+```
+
+`SYP` has no minor unit in CLDR, so `currency_digits=false` is needed to show piastres. `numbering_system="default"`
+uses the locale's own separators (`٬` and `٫`); Babel keeps Latin digits either way, so
+Arabic-Indic digits come from the arapy plugin.

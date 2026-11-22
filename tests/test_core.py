@@ -26,6 +26,7 @@ from jinja_types import (
 from jinja_types.core import PLUGIN_GROUP, OptionsKwargs, plugins, type_repr
 
 NAMESPACES = [
+    "babel",
     "bool",
     "date",
     "datetime",

@@ -148,9 +148,9 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 10: `[babel]` extra
 
-- [ ] `contrib/babel.py` collection, namespace `babel`: `format_decimal`, `format_currency`, `format_percent`, `format_compact_decimal`, `format_date`, `format_datetime`, `format_time`, `format_timedelta`
-- [ ] Locale comes from `Options.locale`, overridable per call (`locale="ar_SY"`)
-- [ ] Registered only when Babel is importable; a clear error otherwise
+- [x] `contrib/babel.py` collection, namespace `babel`: `format_decimal`, `format_currency`, `format_percent`, `format_compact_decimal`, `format_date`, `format_datetime`, `format_time`, `format_timedelta`
+- [x] Locale comes from `Options.locale`, overridable per call (`locale="ar_SY"`)
+- [x] Registered only when Babel is importable; a clear error otherwise
 
 **Done when:** examples pass with Babel installed and are skipped without it, and the `ar_SY` / `en_US` currency examples are documented.
 

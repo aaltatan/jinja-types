@@ -182,6 +182,6 @@ Plugins are loaded only when `load_plugins()` is called, or with `Registry.defau
 - A JS or browser port. templify renders in Python only; the JSON catalog keeps a port possible.
 - Locale formatting beyond the `[babel]` extra.
 
-## Open decision
+## Decided: wrappers are written by hand
 
-- How to write the ~250 wrappers. Option one is by hand, namespace by namespace. Option two is to generate them once from typeshed stubs with a script in `scripts/`, then review them and commit them as normal code. Ask the user before Phase 3 if this is still undecided.
+- The ~250 wrappers are written by hand, namespace by namespace (decided 2026-11-22). No generator script.

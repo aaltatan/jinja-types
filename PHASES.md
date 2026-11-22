@@ -58,7 +58,7 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 **Done when:** `{{ "1500.5" | to_decimal | fmt(",.2f") }}` gives `1,500.50` and `{{ "05/01/2026" | to_date(format="%d/%m/%Y") | fmt("%A") }}` gives `Monday`. Both `coerce` modes and `none_passthrough` are tested.
 
-> **Before Phase 3:** confirm with the user how the wrappers are written, by hand or generated once from typeshed (see the open decision in CLAUDE.md). If it's generation, add `scripts/gen_wrappers.py` here and treat its output as hand-maintained code afterwards.
+> **Before Phase 3:** decided 2026-11-22: wrappers are written by hand, namespace by namespace.
 
 ---
 

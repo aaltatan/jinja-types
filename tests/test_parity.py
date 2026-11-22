@@ -29,6 +29,9 @@ def real(spec: MemberSpec) -> Callable[..., object]:
         if spec.kinds & Kind.ATTRIBUTE:
             return getattr(value, spec.member)
 
+        if spec.classmethod:
+            return getattr(spec.namespace.type, spec.member)(value, *args, **kwargs)
+
         target = copy.copy(value)
         result = getattr(target, spec.member)(*args, **kwargs)
 

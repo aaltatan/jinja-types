@@ -25,6 +25,8 @@ from jinja_types import (
 )
 from jinja_types.core import PLUGIN_GROUP, OptionsKwargs, plugins, type_repr
 
+NAMESPACES = ["bool", "decimal", "float", "fraction", "int", "str"]
+
 
 def render(
     template: str,
@@ -491,8 +493,10 @@ def test_registry_lookup_and_copy() -> None:
 
     copied.include(Collection("extra", int))
 
-    assert [ns.name for ns in registry.namespaces()] == ["date", "datetime", "list", "str"]
-    assert [ns.name for ns in copied.namespaces()] == ["date", "datetime", "extra", "list", "str"]
+    demo_names = sorted([*NAMESPACES, "date", "datetime", "list"])
+
+    assert [ns.name for ns in registry.namespaces()] == demo_names
+    assert [ns.name for ns in copied.namespaces()] == sorted([*demo_names, "extra"])
     assert render("{{ d | date.year }}", copied, context={"d": demo.MOMENT}) == "2026"
 
     with pytest.raises(KeyError):
@@ -500,7 +504,7 @@ def test_registry_lookup_and_copy() -> None:
 
 
 def test_default_registry_namespaces() -> None:
-    assert [ns.name for ns in Registry.default().namespaces()] == ["str"]
+    assert [ns.name for ns in Registry.default().namespaces()] == NAMESPACES
 
 
 # --- plugins ---------------------------------------------------------------------------------

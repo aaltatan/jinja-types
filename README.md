@@ -19,3 +19,16 @@ built-in filters (`count`, `format`, `join`, `replace`, …):
 ```
 
 Helpers that are not type members use plain names: `fmt`, `to_int`, `to_decimal`, `to_date`, …
+
+## Example: money
+
+Round a salary half-up to two places, then format it with thousands separators:
+
+```jinja
+{{ salary | decimal.quantize(decimal.Decimal("0.01"), rounding=decimal.ROUND_HALF_UP) | fmt(",.2f") }}
+```
+
+With `salary = Decimal("1500.005")` this gives `1,500.01`. The global `decimal` holds
+`Decimal`, `Context` and the `ROUND_*` constants; the filter namespace `decimal.*` holds the
+`Decimal` methods. `bool` is a subclass of `int`, so every `int.*` filter also accepts `true`
+and `false`.

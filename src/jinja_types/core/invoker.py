@@ -127,7 +127,7 @@ class Invoker:
                 hint=NONE_HINT,
             )
 
-        if namespace.name is None:
+        if namespace.name is None or spec.classmethod:
             return self.run(spec, spec, (value, *args), kwargs)
 
         parse = self.registry.namespace(namespace.name).parse

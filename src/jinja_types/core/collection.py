@@ -20,6 +20,9 @@ def type_repr(hint: object) -> str:
     if hint is Ellipsis:
         return "..."
 
+    if isinstance(hint, typing.TypeAliasType):
+        return type_repr(hint.__value__)
+
     if isinstance(hint, list):
         return "[" + ", ".join(type_repr(arg) for arg in hint) + "]"
 
@@ -50,6 +53,7 @@ def build_spec(
     examples: Iterable[Example] = (),
     test: bool | None = None,
     constant: bool = False,
+    classmethod: bool = False,
     source: str = "jinja_types",
 ) -> MemberSpec:
     """Build a spec from a wrapper's own signature and type hints."""
@@ -116,6 +120,7 @@ def build_spec(
         examples=tuple(examples),
         source=source,
         constant=constant,
+        classmethod=classmethod,
     )
 
 
@@ -172,6 +177,17 @@ class Collection:
 
         return self._register(Kind.ATTRIBUTE, member, examples, None)
 
+    def classmethod[F: Callable[..., object]](
+        self, *, member: str | None = None, examples: Iterable[Example] = ()
+    ) -> Callable[[F], F]:
+        """Register a classmethod as a parsing filter (`{{ "2026-01-05" | date.fromisoformat }}`).
+
+        The piped value is the classmethod's first argument, so it is not checked against, or
+        coerced to, the namespace type.
+        """
+
+        return self._register(Kind.FILTER, member, examples, None, classmethod=True)
+
     def global_[F: Callable[..., object]](
         self,
         *,
@@ -195,6 +211,8 @@ class Collection:
         examples: Iterable[Example],
         test: bool | None,
         constant: bool = False,
+        *,
+        classmethod: bool = False,
     ) -> Callable[[F], F]:
         def register(func: F) -> F:
             spec = build_spec(
@@ -205,6 +223,7 @@ class Collection:
                 examples=examples,
                 test=test,
                 constant=constant,
+                classmethod=classmethod,
                 source=self.source,
             )
 

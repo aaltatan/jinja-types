@@ -1,5 +1,6 @@
 """The catalog: a serializable view of every spec, for docs and autocomplete."""
 
+import builtins
 import dataclasses
 import json
 from collections.abc import Iterable, Iterator
@@ -24,8 +25,9 @@ class CatalogEntry:
     source: str
     replaced: bool
     constant: bool
+    classmethod: bool
 
-    @classmethod
+    @builtins.classmethod  # the `classmethod` field shadows the name here
     def from_spec(cls, spec: MemberSpec) -> Self:
         return cls(
             name=spec.name,
@@ -39,6 +41,7 @@ class CatalogEntry:
             source=spec.source,
             replaced=spec.replaced,
             constant=spec.constant,
+            classmethod=spec.classmethod,
         )
 
 

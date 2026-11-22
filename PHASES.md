@@ -74,11 +74,11 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 4: Numbers — `int`, `float`, `bool`, `decimal`, `fraction`
 
-- [ ] `int`: methods (`bit_length`, `bit_count`, `to_bytes`, `as_integer_ratio`, `is_integer`, `conjugate`), attributes (`real`, `imag`, `numerator`, `denominator`), classmethod `int.from_bytes`
-- [ ] `float`: `is_integer`, `as_integer_ratio`, `hex`, `conjugate`, `real`, `imag`; classmethod `float.fromhex`
-- [ ] `bool`: its own namespace; document that `int.*` also accepts bools
-- [ ] `decimal`: all 53 public members (quantize, normalize, to_integral_value, compare*, max/min, sqrt, ln, log10, exp, is_* predicates, adjusted, as_tuple, …); `rounding` takes the `decimal.ROUND_*` globals
-- [ ] `fraction`: `limit_denominator`, `as_integer_ratio`, `is_integer`, `numerator`, `denominator`; classmethods `fraction.from_float`, `fraction.from_decimal`
+- [x] `int`: methods (`bit_length`, `bit_count`, `to_bytes`, `as_integer_ratio`, `is_integer`, `conjugate`), attributes (`real`, `imag`, `numerator`, `denominator`), classmethod `int.from_bytes`
+- [x] `float`: `is_integer`, `as_integer_ratio`, `hex`, `conjugate`, `real`, `imag`; classmethod `float.fromhex`
+- [x] `bool`: its own namespace; document that `int.*` also accepts bools
+- [x] `decimal`: all 55 public members (quantize, normalize, to_integral_value, compare*, max/min, sqrt, ln, log10, exp, is_* predicates, adjusted, as_tuple, …); `rounding` takes the `decimal.ROUND_*` globals
+- [x] `fraction`: `limit_denominator`, `as_integer_ratio`, `is_integer`, `numerator`, `denominator`; classmethods `fraction.from_float`, `fraction.from_decimal`
 
 **Done when:** all number namespaces pass examples and parity, and a salaries-style example (`decimal.quantize(..., rounding=decimal.ROUND_HALF_UP) | fmt(",.2f")`) is in the README.
 

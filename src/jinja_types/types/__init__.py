@@ -8,6 +8,8 @@ def builtin_collections() -> list[Collection]:
     # local: these modules import core, which imports this module lazily
     from jinja_types import helpers
 
-    from . import str_
+    from . import bool_, decimal_, float_, fraction_, int_, str_
 
-    return [*helpers.collections, str_.collection]
+    modules = [str_, int_, bool_, float_, decimal_, fraction_]
+
+    return [*helpers.collections, *(module.collection for module in modules)]

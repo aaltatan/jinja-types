@@ -48,3 +48,5 @@ class MemberSpec:
     replaced: bool = False
     constant: bool = False
     """A global whose value is `func()` rather than `func` itself."""
+    classmethod: bool = False
+    """A parsing filter: the piped value is an argument, not an instance of the namespace type."""

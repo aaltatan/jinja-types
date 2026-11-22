@@ -156,14 +156,17 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ---
 
-## Phase 11: arapy plugin (Arabic)
+## Phase 11: Arabic — the `ar` namespace (arapy)
 
-- [ ] In **arapy** (`../arapy`): `arapy/jinja.py` exports `collections`, behind an optional extra `arapy[jinja]` (`jinja-types`); entry point `arapy = "arapy.jinja:collections"` in group `jinja_types.plugins`
-- [ ] Namespace `ar` (plain helpers would clash too easily): `ar.to_words` / `ar.format_money` (tafqeet), `ar.to_arabic_digits`, `ar.to_latin_digits`, `ar.to_persian_digits`, `ar.format_number`, `ar.format_percent`, `ar.parse_number`, `ar.ordinal`, `ar.ordinal_adverb`, `ar.normalize` / `ar.equals` (test) / `ar.sort`, `ar.shape` (needs `arapy[shape]`), `ar.date` / `ar.datetime` formatting via `ArDate` / `ArDateTime`
+arapy is a **runtime dependency** of jinja-types (decided 2026-11-22), not a plugin, so the
+Arabic filters ship in `Registry.default()` like every other built-in collection.
+
+- [ ] `types/ar_.py`, namespace `ar` (plain helpers would clash too easily): `ar.to_words` / `ar.format_money` (tafqeet), `ar.to_arabic_digits`, `ar.to_latin_digits`, `ar.to_persian_digits`, `ar.format_number`, `ar.format_percent`, `ar.parse_number`, `ar.ordinal`, `ar.ordinal_adverb`, `ar.normalize` / `ar.equals` (test) / `ar.sort`, `ar.date` / `ar.datetime` formatting via `ArDate` / `ArDateTime`
+- [ ] Members that need arapy's own extras (`shape`, `hijri`) are exposed through matching jinja-types extras (`jinja-types[shape]` → `arapy[shape]`, …) and fail with a clear install hint when missing
 - [ ] Wrappers follow the jinja-types conventions (typed, one docstring, ≥1 example each); arapy errors (`ArapyError`) surface as `JinjaTypesError` with a hint
-- [ ] jinja-types side: an integration test that runs when arapy is installed (`Registry.default(plugins=True)` sees `source == "arapy"`), skipped otherwise; plugin docs page generated
+- [ ] Generated docs page `docs/ar.md`
 
-**Done when:** `{{ salary | ar.format_money("SYP") }}` renders the amount in Arabic words through the plugin entry point, and both repos' suites pass.
+**Done when:** `{{ salary | ar.format_money("SYP") }}` renders the amount in Arabic words from `Registry.default()`, with examples and parity passing.
 
 ---
 

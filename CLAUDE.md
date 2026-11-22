@@ -1,6 +1,6 @@
 # CLAUDE.md: jinja-types
 
-`jinja-types` (import `jinja_types`) is a Jinja2 extension. It exposes Python type methods and attributes (str, int, float, bool, Decimal, Fraction, date, datetime, time, timedelta, list, dict, UUID, Path), plus the `re` module, as Jinja filters and tests. It is built around a **registry**, so new filter sets are easy to add (e.g. arapy for Arabic later). It is a hard dependency of **templify**, which renders templates in Python only.
+`jinja-types` (import `jinja_types`) is a Jinja2 extension. It exposes Python type methods and attributes (str, int, float, bool, Decimal, Fraction, date, datetime, time, timedelta, list, dict, UUID, Path), plus the `re` module, as Jinja filters and tests. It is built around a **registry**, so new filter sets are easy to add. Arabic filters (`ar.*`) come from **arapy**, a runtime dependency. It is a hard dependency of **templify**, which renders templates in Python only.
 
 Read `PHASES.md` for the build order. Work one phase at a time. A phase is done only when all of its acceptance criteria pass.
 
@@ -14,7 +14,7 @@ Read `PHASES.md` for the build order. Work one phase at a time. A phase is done 
 - **mypy --strict** must pass on `src/` and `tests/`.
 - **pytest** (+ `pytest-cov`). Coverage target is ≥ 95% on `src/jinja_types/core`.
 - Layout is `src/jinja_types/`. Ship `py.typed`.
-- Runtime dependency: `jinja2>=3.1`. Optional extras: `[regex]` (regex library, timeouts) and `[babel]` (locale formatting).
+- Runtime dependencies: `jinja2>=3.1` and `arapy>=0.1.0` (Arabic text, numbers and dates; no dependencies of its own). Optional extras: `[regex]` (regex library, timeouts) and `[babel]` (locale formatting).
 - English docs and docstrings.
 
 Before every commit run:
@@ -65,7 +65,7 @@ src/jinja_types/
   helpers/             # fmt, to_* converters, globals (decimal, re flags, today, now)
   types/               # one module per namespace: str_.py, int_.py, float_.py, bool_.py,
                        #   decimal_.py, fraction_.py, date_.py, datetime_.py, time_.py,
-                       #   timedelta_.py, list_.py, dict_.py, uuid_.py, path_.py
+                       #   timedelta_.py, list_.py, dict_.py, uuid_.py, path_.py, ar_.py (arapy)
   regex/               # re_.py (module functions), match_.py (Match members), engine.py
   contrib/babel.py     # [babel] extra: babel.format_decimal, babel.format_currency, babel.format_date…
   cli.py               # `jinja-types catalog …` (argparse, no extra deps)
@@ -154,7 +154,7 @@ A third-party package exposes collections through an entry point:
 
 ```toml
 [project.entry-points."jinja_types.plugins"]
-arapy = "arapy.jinja:collections"      # a Collection or an iterable of Collections
+acme = "acme.jinja:collections"        # a Collection or an iterable of Collections
 ```
 
 Plugins are loaded only when `load_plugins()` is called, or with `Registry.default(plugins=True)`. Loading stays explicit so templify renders deterministically.

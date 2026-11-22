@@ -6,6 +6,25 @@ types (`str`, `int`, `float`, `bool`, `Decimal`, `Fraction`, `date`, `datetime`,
 Names and parameters match Python exactly, everything works in `ImmutableSandboxedEnvironment`,
 and a registry makes it easy to plug in new filter sets.
 
+## Setup
+
+Add jinja-types as an extension on your environment:
+
+```python
+from jinja2.sandbox import ImmutableSandboxedEnvironment
+
+from jinja_types import TypesExtension
+
+env = ImmutableSandboxedEnvironment(extensions=[TypesExtension])
+
+# with options: none_passthrough, coerce, regex_timeout, locale, registry
+env = ImmutableSandboxedEnvironment(
+    extensions=[TypesExtension.configure(none_passthrough=True, locale="ar_SY")],
+)
+```
+
+The string `"jinja_types.TypesExtension"` works too, wherever Jinja takes extension names.
+
 ## Qualified names only
 
 Every type member is reachable only as `namespace.member`, so nothing clashes with Jinja's
@@ -65,7 +84,7 @@ jinja-types conflicts --plugins
 ```
 
 With the `[babel]` extra, `babel.*` formats numbers, money and dates for a locale. The locale
-is the `locale=` argument, else `install(env, locale="ar_SY")`, else `en_US`:
+is the `locale=` argument, else `TypesExtension.configure(locale="ar_SY")`, else `en_US`:
 
 ```jinja
 {{ salary | babel.format_currency("USD") }}                                   {# $1,234.50 (en_US) #}

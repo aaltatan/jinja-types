@@ -132,10 +132,11 @@ registry.load_plugins()  # entry points in group "jinja_types.plugins"
 env = ImmutableSandboxedEnvironment(
     extensions=[TypesExtension.configure(registry=registry, none_passthrough=True)],
 )
-# or: install(env, registry=registry, coerce=True)
 ```
 
-`TypesExtension.configure(**options)` returns a configured subclass, because Jinja constructs extensions with only `environment`. With no configuration, `TypesExtension` uses `Registry.default()` and default `Options`.
+`TypesExtension.configure(**options)` returns a configured subclass, because Jinja constructs extensions with only `environment`. With no configuration, `TypesExtension` uses `Registry.default()` and default `Options` (also usable as the string `"jinja_types.TypesExtension"`).
+
+**Integration rule:** any project that uses jinja-types with Jinja2, templify included, adds it as an **extension** on its `Environment` (`extensions=[TypesExtension]` or `TypesExtension.configure(…)`). `install(env, …)` is the plumbing the extension calls; use it only in jinja-types' own tests.
 
 ### Conflict rules (enforced in `Registry.include`)
 

@@ -183,7 +183,7 @@ Arabic filters ship in `Registry.default()` like every other built-in collection
 
 ## Phase 13: templify integration and 0.1.0 release
 
-- [ ] templify depends on `jinja-types` and calls `install(env, …)` on its sandboxed env
+- [ ] templify depends on `jinja-types` and adds it as an extension on its sandboxed env (`extensions=[TypesExtension.configure(…)]`), not through `install()`
 - [ ] templify reads `registry.catalog()` for autocomplete and validation
 - [ ] Plugin author guide (`docs/plugins.md`) with a full example collection and an entry point
 - [ ] CHANGELOG, version `0.1.0`, publish to PyPI (trusted publishing)

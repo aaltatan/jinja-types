@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-11-23
+
+### Added
+
+- A `random` global with the `random` module's functions (`random`, `uniform`, `randint`,
+  `randrange`, `choice`, `choices`, `sample`, `shuffle`, `getrandbits`, `gauss`) on a private
+  generator. `random.Random(seed)` gives repeatable output; `shuffle` returns a new list.
+- A `secrets` global: `token_hex`, `token_urlsafe`, `choice`, `randbelow`.
+- `uuid4()` and `uuid1()` globals. Without a `node`, `uuid1()` uses a random node id, never the
+  machine's MAC address.
+
 ## [0.1.1] - 2026-11-22
 
 ### Added
@@ -39,5 +50,6 @@ First release.
   catalog exported as JSON (with a schema) or Markdown by the `jinja-types` command.
 - Generated reference docs in `docs/` and a plugin author guide (`docs/plugins.md`).
 
+[0.2.0]: https://github.com/aaltatan/jinja-types/releases/tag/v0.2.0
 [0.1.1]: https://github.com/aaltatan/jinja-types/releases/tag/v0.1.1
 [0.1.0]: https://github.com/aaltatan/jinja-types/releases/tag/v0.1.0

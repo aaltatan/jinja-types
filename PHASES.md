@@ -127,7 +127,7 @@ The heart of the package. Build it against a tiny **demo collection** in the tes
 
 ## Phase 8: `uuid`, `path`
 
-- [x] `uuid`: attributes `hex`, `int`, `bytes`, `urn`, `version`, `variant`, `fields`, `time`, `node`. Global `uuid5(namespace, name)` only; no `uuid4()`, so renders stay repeatable (decided 2026-11-22)
+- [x] `uuid`: attributes `hex`, `int`, `bytes`, `urn`, `version`, `variant`, `fields`, `time`, `node`. Global `uuid5(namespace, name)`. ~~No `uuid4()`, so renders stay repeatable (decided 2026-11-22)~~ Reversed 2026-11-23: globals `uuid4()`, `uuid1()` (random node, never the MAC), `random` (private generator; `random.Random(seed)` for repeatable output) and `secrets`
 - [x] `path` (PurePath only): `name`, `stem`, `suffix`, `suffixes`, `parent`, `parents`, `parts`, `anchor`, `drive`, `root`, `as_posix`, `as_uri`, `with_name`, `with_stem`, `with_suffix`, `joinpath`, `relative_to`, `is_relative_to`, `is_absolute`, `match`, `full_match` (3.13+, guarded)
 - [x] Test asserting that no `path.*` member performs I/O (the allowlist is explicit)
 

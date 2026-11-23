@@ -12,7 +12,7 @@ from jinja2 import Environment
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 from jinja_types import Collection, JinjaTypesError, Registry, RegistryError, install
-from jinja_types.core import OptionsKwargs
+from jinja_types.core import Kind, OptionsKwargs
 from jinja_types.helpers import PARSERS, convert
 
 
@@ -35,11 +35,16 @@ def test_acceptance() -> None:
 
 
 def test_no_helper_is_a_jinja_builtin() -> None:
-    names = {spec.name for spec in Registry.default().specs()}
-
+    specs = Registry.default().specs()
     env = Environment()
 
-    assert not names & (env.filters.keys() | env.tests.keys() | env.globals.keys())
+    # each kind is its own Jinja table: the global `random` coexists with the filter `random`
+    for kinds, table in (
+        (Kind.FILTER | Kind.ATTRIBUTE, env.filters),
+        (Kind.TEST, env.tests),
+        (Kind.GLOBAL, env.globals),
+    ):
+        assert not {spec.name for spec in specs if spec.kinds & kinds} & table.keys()
 
     install(env)
 
@@ -166,3 +171,35 @@ def test_none_passthrough_on_helpers(value: str) -> None:
 
     with pytest.raises(JinjaTypesError, match="none_passthrough=True"):
         render(template)
+
+
+def test_random_is_seedable_and_never_mutates() -> None:
+    seeded = "{% set r = random.Random(7) %}{{ r.random() }} {{ r.randrange(100) }}"
+
+    assert render(seeded) == render(seeded)
+    assert render(
+        "{% set xs = [1, 2, 3] %}{{ random.shuffle(xs) | sort | join }}-{{ xs | join }}"
+    ) == ("123-123")
+    assert render("{{ random._rng }}{{ random.Random(1)._rng }}") == ""
+
+
+def test_random_and_secrets_errors() -> None:
+    with pytest.raises(JinjaTypesError, match=r"random\.choice"):
+        render("{{ random.choice([]) }}")
+
+    with pytest.raises(JinjaTypesError, match=r"secrets\.randbelow"):
+        render("{{ secrets.randbelow(0) }}")
+
+
+def test_uuid1_never_reads_the_mac(monkeypatch: pytest.MonkeyPatch) -> None:
+    import uuid
+
+    def boom() -> int:
+        raise AssertionError("uuid.getnode was called")
+
+    monkeypatch.setattr(uuid, "getnode", boom)
+
+    node = int(render("{{ uuid1() | uuid.node }}"))
+
+    assert node & (1 << 40)
+    assert render("{{ uuid4() == uuid4() }}") == "False"

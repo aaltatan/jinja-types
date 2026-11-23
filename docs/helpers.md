@@ -35,6 +35,20 @@ Return the current datetime, local or in `tz` (a `tzinfo`).
 - ``{{ now().tzinfo }}`` → ``None``
 - ``{{ now(tz).utcoffset() }}`` with `tz = datetime.timezone.utc` → ``0:00:00``
 
+## `random`
+
+`random() -> RandomNamespace`
+
+*global*
+
+The `random` object; `random.Random(seed)` gives a repeatable generator.
+
+- ``{{ random.random() < 1 }}`` → ``True``
+- ``{{ random.Random(42).randint(1, 6) }}`` → ``6``
+- ``{{ random.Random(42).choice(['a', 'b', 'c']) }}`` → ``c``
+- ``{{ random.Random(42).shuffle([1, 2, 3, 4]) | join }}`` → ``3241``
+- ``{{ random.Random(42).sample(range(10), 3) | join }}`` → ``104``
+
 ## `re`
 
 `re() -> ReFlags`
@@ -45,6 +59,17 @@ The `re` flags object, with `re.compile(pattern, flags=0)` for the `pattern` nam
 
 - ``{{ re.I == 2 and re.IGNORECASE == re.I }}`` → ``True``
 - ``{{ re.compile('a+', re.I) | pattern.findall('aAb') | join }}`` → ``aA``
+
+## `secrets`
+
+`secrets() -> SecretsNamespace`
+
+*global*
+
+The `secrets` object: cryptographically strong tokens and choices.
+
+- ``{{ secrets.token_hex(8) | length }}`` → ``16``
+- ``{{ secrets.randbelow(3) < 3 }}`` → ``True``
 
 ## `to_bool`
 
@@ -190,6 +215,27 @@ Return today's local date.
 
 - ``{{ today().year > 2000 }}`` → ``True``
 
+## `uuid1`
+
+`uuid1(node: int | None = None, clock_seq: int | None = None) -> UUID`
+
+*global*
+
+Return a time-based UUID; without `node`, a random node id is used, never the MAC.
+
+- ``{{ uuid1() | uuid.version }}`` → ``1``
+- ``{{ uuid1(node=1) | uuid.node }}`` → ``1``
+
+## `uuid4`
+
+`uuid4() -> UUID`
+
+*global*
+
+Return a random UUID (different on every call).
+
+- ``{{ uuid4() | uuid.version }}`` → ``4``
+
 ## `uuid5`
 
 `uuid5(namespace: UUID | str, name: str) -> UUID`
@@ -197,8 +243,6 @@ Return today's local date.
 *global*
 
 Return the name-based (SHA-1) UUID; same input, same UUID. `namespace` may be UUID text.
-
-There is no `uuid4()`: random values would make renders differ every time.
 
 - ``{{ uuid5('6ba7b810-9dad-11d1-80b4-00c04fd430c8', 'example.com') }}`` → ``cfbff0d1-9375-5685-968c-48ce8b15ae17``
 - ``{{ uuid5(ns, 'example.com') | uuid.version }}`` with `ns = UUID('6ba7b810-9dad-11d1-80b4-00c04fd430c8')` → ``5``

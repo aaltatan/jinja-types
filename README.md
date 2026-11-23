@@ -130,7 +130,7 @@ syp = Currency.create(
 
 ## Reference
 
-Every member (327), with every example. Generated from the catalog.
+Every member (331), with every example. Generated from the catalog.
 
 [`ar`](#ar) · [`babel`](#babel) · [`date`](#date) · [`datetime`](#datetime) · [`decimal`](#decimal) · [`dict`](#dict) · [`float`](#float) · [`fraction`](#fraction) · [`helpers`](#helpers) · [`int`](#int) · [`list`](#list) · [`match`](#match) · [`path`](#path) · [`pattern`](#pattern) · [`re`](#re) · [`str`](#str) · [`time`](#time) · [`timedelta`](#timedelta) · [`uuid`](#uuid)
 
@@ -401,8 +401,15 @@ Every member (327), with every example. Generated from the catalog.
 |  |  |  | `` {{ d \| fmt('%d/%m/%Y') }} ``<br>with `` d = datetime.date(2026, 1, 5) `` | `` 05/01/2026 `` |
 | `now(tz)` | global | Return the current datetime, local or in `tz` (a `tzinfo`). | `` {{ now().tzinfo }} `` | `` None `` |
 |  |  |  | `` {{ now(tz).utcoffset() }} ``<br>with `` tz = datetime.timezone.utc `` | `` 0:00:00 `` |
+| `random` | global | The `random` object; `random.Random(seed)` gives a repeatable generator. | `` {{ random.random() < 1 }} `` | `` True `` |
+|  |  |  | `` {{ random.Random(42).randint(1, 6) }} `` | `` 6 `` |
+|  |  |  | `` {{ random.Random(42).choice(['a', 'b', 'c']) }} `` | `` c `` |
+|  |  |  | `` {{ random.Random(42).shuffle([1, 2, 3, 4]) \| join }} `` | `` 3241 `` |
+|  |  |  | `` {{ random.Random(42).sample(range(10), 3) \| join }} `` | `` 104 `` |
 | `re` | global | The `re` flags object, with `re.compile(pattern, flags=0)` for the `pattern` namespace. | `` {{ re.I == 2 and re.IGNORECASE == re.I }} `` | `` True `` |
 |  |  |  | `` {{ re.compile('a+', re.I) \| pattern.findall('aAb') \| join }} `` | `` aA `` |
+| `secrets` | global | The `secrets` object: cryptographically strong tokens and choices. | `` {{ secrets.token_hex(8) \| length }} `` | `` 16 `` |
+|  |  |  | `` {{ secrets.randbelow(3) < 3 }} `` | `` True `` |
 | `to_bool` | filter | Convert strictly: true/yes/on/1 or false/no/off/0 (any case), bools, and ints 0 or 1. | `` {{ 'Yes' \| to_bool }} `` | `` True `` |
 |  |  |  | `` {{ 'off' \| to_bool }} `` | `` False `` |
 |  |  |  | `` {{ 1 \| to_bool }} `` | `` True `` |
@@ -430,6 +437,9 @@ Every member (327), with every example. Generated from the catalog.
 |  |  |  | `` {{ '1 day, 2:30:00' \| to_timedelta }} `` | `` 1 day, 2:30:00 `` |
 | `to_uuid` | filter | Convert to `UUID`. | `` {{ '12345678-1234-5678-1234-567812345678' \| to_uuid }} `` | `` 12345678-1234-5678-1234-567812345678 `` |
 | `today()` | global | Return today's local date. | `` {{ today().year > 2000 }} `` | `` True `` |
+| `uuid1(node, clock_seq)` | global | Return a time-based UUID; without `node`, a random node id is used, never the MAC. | `` {{ uuid1() \| uuid.version }} `` | `` 1 `` |
+|  |  |  | `` {{ uuid1(node=1) \| uuid.node }} `` | `` 1 `` |
+| `uuid4()` | global | Return a random UUID (different on every call). | `` {{ uuid4() \| uuid.version }} `` | `` 4 `` |
 | `uuid5(namespace, name)` | global | Return the name-based (SHA-1) UUID; same input, same UUID. `namespace` may be UUID text. | `` {{ uuid5('6ba7b810-9dad-11d1-80b4-00c04fd430c8', 'example.com') }} `` | `` cfbff0d1-9375-5685-968c-48ce8b15ae17 `` |
 |  |  |  | `` {{ uuid5(ns, 'example.com') \| uuid.version }} ``<br>with `` ns = UUID('6ba7b810-9dad-11d1-80b4-00c04fd430c8') `` | `` 5 `` |
 

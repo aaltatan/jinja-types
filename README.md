@@ -1,5 +1,7 @@
 # jinja-types
 
+**Documentation: <https://aaltatan.github.io/jinja-types/>**
+
 `jinja-types` is a Jinja2 extension that exposes the methods and attributes of everyday Python
 types (`str`, `int`, `float`, `bool`, `Decimal`, `Fraction`, `date`, `datetime`, `time`,
 `timedelta`, `list`, `dict`, `UUID`, `PurePath`) and the `re` module as Jinja filters and tests.

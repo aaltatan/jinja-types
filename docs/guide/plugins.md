@@ -75,10 +75,10 @@ The decorators are:
 
 | Decorator | Template use | Notes |
 |---|---|---|
-| `@collection.filter()` | `{{ x \| ns.name(...) }}` | A `bool` return also registers a test; pass `test=False` to opt out. |
+| `@collection.filter()` | `{{ x | ns.name(...) }}` | A `bool` return also registers a test; pass `test=False` to opt out. |
 | `@collection.test()` | `{% if x is ns.name %}` | A test only. |
-| `@collection.attribute()` | `{{ x \| ns.name }}` | A property, no arguments. |
-| `@collection.classmethod()` | `{{ "2026-01-05" \| ns.name }}` | Parses the piped value, which is not type-checked. |
+| `@collection.attribute()` | `{{ x | ns.name }}` | A property, no arguments. |
+| `@collection.classmethod()` | `{{ "2026-01-05" | ns.name }}` | Parses the piped value, which is not type-checked. |
 | `@collection.global_()` | `{{ name(...) }}` | A function global. With `constant=True`, the global is the object it returns. |
 
 Conventions, the same ones jinja-types follows:

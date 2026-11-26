@@ -14,7 +14,6 @@ from jinja_types.core.catalog import signature
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = json.loads((ROOT / "schema" / "catalog.schema.json").read_text(encoding="utf-8"))
-HAND_WRITTEN = {"plugins.md"}  # not generated from the catalog
 
 
 def test_catalog_export_matches_the_schema() -> None:
@@ -59,17 +58,17 @@ def test_var_keyword_signature() -> None:
 @pytest.mark.skipif(sys.version_info >= (3, 13), reason="the docs are generated on Python 3.12")
 def test_generated_docs_are_up_to_date() -> None:
     pages = runpy.run_path(str(ROOT / "scripts" / "gen_docs.py"))["pages"]
-    docs = ROOT / "docs"
+    docs = ROOT / "docs" / "guide" / "types"
 
     expected = pages(Registry.default().catalog())
 
-    written = sorted(path.name for path in docs.glob("*.md") if path.name not in HAND_WRITTEN)
+    written = sorted(path.name for path in docs.glob("*.md"))
 
     assert written == sorted(expected)
 
     for name, text in expected.items():
         assert (docs / name).read_text(encoding="utf-8") == text, (
-            f"docs/{name} is stale: run `uv run python scripts/gen_docs.py`"
+            f"docs/guide/types/{name} is stale: run `uv run python scripts/gen_docs.py`"
         )
 
 

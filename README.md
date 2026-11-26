@@ -75,7 +75,7 @@ namespace, with the pattern piped in as in Python:
 ```
 
 Every filter, test and global is listed with its examples in the [Reference](#reference) below,
-and in more detail (signatures, types) in [docs/](docs/index.md). Both are generated from the catalog. The same catalog is
+and in more detail (signatures, types) in [docs/](docs/guide/types/index.md). Both are generated from the catalog. The same catalog is
 available from the command line:
 
 ```
@@ -84,7 +84,7 @@ jinja-types catalog --kind test            # JSON, see schema/catalog.schema.jso
 jinja-types conflicts --plugins
 ```
 
-To add your own filter sets as an installable plugin, see [docs/plugins.md](docs/plugins.md).
+To add your own filter sets as an installable plugin, see [docs/guide/plugins.md](docs/guide/plugins.md).
 
 With the `[babel]` extra, `babel.*` formats numbers, money and dates for a locale. The locale
 is the `locale=` argument, else `TypesExtension.configure(locale="ar_SY")`, else `en_US`:

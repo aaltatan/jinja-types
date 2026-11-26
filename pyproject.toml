@@ -31,7 +31,7 @@ Homepage = "https://github.com/aaltatan/jinja-types"
 Repository = "https://github.com/aaltatan/jinja-types"
 Issues = "https://github.com/aaltatan/jinja-types/issues"
 Changelog = "https://github.com/aaltatan/jinja-types/blob/main/CHANGELOG.md"
-Documentation = "https://github.com/aaltatan/jinja-types/tree/main/docs"
+Documentation = "https://aaltatan.github.io/jinja-types/"
 
 [project.optional-dependencies]
 regex = ["regex"]
